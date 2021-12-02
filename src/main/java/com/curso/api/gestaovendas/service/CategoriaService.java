@@ -36,4 +36,8 @@ public class CategoriaService {
     public boolean categoriaIsPresent(Long id){
         return categoriaRepository.findById(id).isPresent();
     }
+
+    public void deletar(Long id){
+        categoriaRepository.deleteById(id);
+    }
 }
