@@ -1,5 +1,6 @@
 package com.curso.api.gestaovendas.service;
 
+import com.curso.api.gestaovendas.exception.RegraNegocioException;
 import com.curso.api.gestaovendas.model.Categoria;
 import com.curso.api.gestaovendas.repository.CategoriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ public class CategoriaService {
     private CategoriaRepository categoriaRepository;
 
     public Categoria salvar(Categoria categoria){
+        categoriaIsPresentName(categoria);
         return categoriaRepository.save(categoria);
     }
 
@@ -27,17 +29,27 @@ public class CategoriaService {
          return categoriaRepository.findById(id);
     }
 
-    public Categoria atualizar(Categoria categoria){
-        if(!categoriaIsPresent(categoria.getId())){
-            throw new EmptyResultDataAccessException(1);
-        } else return categoriaRepository.save(categoria);
+    public Categoria findByNome(String nome){
+        return categoriaRepository.findByNome(nome);
     }
 
-    public boolean categoriaIsPresent(Long id){
-        return categoriaRepository.findById(id).isPresent();
+    public Categoria atualizar(Categoria categoria){
+        if(getById(categoria.getId()).isEmpty()){
+            throw new EmptyResultDataAccessException(1);
+        } else{
+            categoriaIsPresentName(categoria);
+            return categoriaRepository.save(categoria);
+        }
     }
 
     public void deletar(Long id){
         categoriaRepository.deleteById(id);
+    }
+
+    public void categoriaIsPresentName(Categoria categoria){
+        Categoria categoriaIsPresent = findByNome(categoria.getNome());
+        if(categoriaIsPresent != null && categoriaIsPresent.getId() != categoria.getId()){
+            throw new RegraNegocioException(String.format("A categoria %s já esta cadastrada", categoria.getNome()));
+        }
     }
 }

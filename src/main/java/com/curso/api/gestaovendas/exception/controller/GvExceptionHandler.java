@@ -1,5 +1,7 @@
-package com.curso.api.gestaovendas.exception;
+package com.curso.api.gestaovendas.exception.controller;
 
+import com.curso.api.gestaovendas.exception.model.MessagesError;
+import com.curso.api.gestaovendas.exception.RegraNegocioException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -24,26 +26,34 @@ public class GvExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        List<Error> errors = getListErrors(ex.getBindingResult());
-        return handleExceptionInternal(ex, errors, headers, HttpStatus.BAD_REQUEST, request);
+        List<MessagesError> messagesErrors = getListErrors(ex.getBindingResult());
+        return handleExceptionInternal(ex, messagesErrors, headers, HttpStatus.BAD_REQUEST, request);
     }
 
-    private List<Error> getListErrors(BindingResult bindingResult){
-        List<Error> errors = new ArrayList<>();
+    private List<MessagesError> getListErrors(BindingResult bindingResult){
+        List<MessagesError> messagesErrors = new ArrayList<>();
         bindingResult.getFieldErrors().forEach(fieldError -> {
             String msgUser = MsgErrorUser(fieldError);
             String msgDev = fieldError.toString();
-            errors.add(new Error(msgUser, msgDev));
+            messagesErrors.add(new MessagesError(msgUser, msgDev));
         });
-        return errors;
+        return messagesErrors;
     }
 
     @ExceptionHandler(EmptyResultDataAccessException.class)
     public ResponseEntity<Object> handleEmptyResultDataAccessException(EmptyResultDataAccessException ex, WebRequest request){
         String msgUser = "Recurso não encontrado";
         String msgDev = ex.toString();
-        List<Error> errors = Arrays.asList(new Error(msgUser, msgDev));
-        return handleExceptionInternal(ex, errors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+        List<MessagesError> messagesErrors = Arrays.asList(new MessagesError(msgUser, msgDev));
+        return handleExceptionInternal(ex, messagesErrors, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+    }
+
+    @ExceptionHandler(RegraNegocioException.class)
+    public ResponseEntity<Object> handleRegraNegocioException(RegraNegocioException ex, WebRequest request){
+        String msgUser = ex.getMessage();
+        String msgDev = ex.getMessage();
+        List<MessagesError> messagesErrors = Arrays.asList(new MessagesError(msgUser, msgDev));
+        return handleExceptionInternal(ex, messagesErrors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 
     private String MsgErrorUser(FieldError fieldError){
