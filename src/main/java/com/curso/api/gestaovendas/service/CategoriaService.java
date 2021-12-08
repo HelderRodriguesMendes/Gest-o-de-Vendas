@@ -29,8 +29,11 @@ public class CategoriaService {
          return categoriaRepository.findById(id);
     }
 
-    public Categoria findByNome(String nome){
-        return categoriaRepository.findByNome(nome);
+    public List<Categoria> findByNome(String nome){
+        Optional<List<Categoria>> optionalCategorias = categoriaRepository.getByNome(nome);
+        if(optionalCategorias.isEmpty()){
+            throw new EmptyResultDataAccessException(1);
+        }else return optionalCategorias.get();
     }
 
     public Categoria atualizar(Categoria categoria){
@@ -47,7 +50,7 @@ public class CategoriaService {
     }
 
     public void categoriaIsPresentName(Categoria categoria){
-        Categoria categoriaIsPresent = findByNome(categoria.getNome());
+        Categoria categoriaIsPresent = categoriaRepository.findByNome(categoria.getNome());
         if(categoriaIsPresent != null && categoriaIsPresent.getId() != categoria.getId()){
             throw new RegraNegocioException(String.format("A categoria %s já esta cadastrada", categoria.getNome()));
         }

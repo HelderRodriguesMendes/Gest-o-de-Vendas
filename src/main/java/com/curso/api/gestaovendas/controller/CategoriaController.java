@@ -41,6 +41,12 @@ public class CategoriaController {
                 ResponseEntity.notFound().build();
     }
 
+    @ApiOperation(value = "Bucar categoria por Nome")
+    @GetMapping("/getNome")
+    public ResponseEntity<List<Categoria>> getByNome(@RequestParam String nome){
+        return new ResponseEntity<List<Categoria>>(categoriaService.findByNome(nome), HttpStatus.OK);
+    }
+
     @ApiOperation(value = "Atualizar")
     @PutMapping("/{id}")
     public ResponseEntity<Categoria> atualizar(@PathVariable Long id, @RequestBody Categoria categoria){
