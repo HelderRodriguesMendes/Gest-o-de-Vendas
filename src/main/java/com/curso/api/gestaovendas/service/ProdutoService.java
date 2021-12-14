@@ -34,8 +34,6 @@ public class ProdutoService {
     }
 
     public Produto salvar(Produto produto){
-        if(categoriaService.getById(produto.getCategoria().getId()).isEmpty()){
-            throw new EmptyResultDataAccessException(1);
-        }else return produtoRepository.save(produto);
+        return produtoRepository.save(produto);
     }
 }

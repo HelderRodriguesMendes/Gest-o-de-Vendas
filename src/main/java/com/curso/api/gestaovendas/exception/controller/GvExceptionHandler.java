@@ -2,6 +2,7 @@ package com.curso.api.gestaovendas.exception.controller;
 
 import com.curso.api.gestaovendas.exception.model.MessagesError;
 import com.curso.api.gestaovendas.exception.RegraNegocioException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -46,6 +47,14 @@ public class GvExceptionHandler extends ResponseEntityExceptionHandler {
         String msgDev = ex.toString();
         List<MessagesError> messagesErrors = Arrays.asList(new MessagesError(msgUser, msgDev));
         return handleExceptionInternal(ex, messagesErrors, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<Object> handleDataIntegrityViolationException(DataIntegrityViolationException ex, WebRequest request){
+        String msgUser = "Recurso não encontrado";
+        String msgDev = ex.toString();
+        List<MessagesError> messagesErrors = Arrays.asList(new MessagesError(msgUser, msgDev));
+        return handleExceptionInternal(ex, messagesErrors, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 
     @ExceptionHandler(RegraNegocioException.class)
