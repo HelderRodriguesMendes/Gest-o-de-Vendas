@@ -14,9 +14,11 @@ public class Categoria implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
     @NotBlank(message = "Nome")
     @Length(min = 3, max = 50, message = "Nome")
+    @Column(name = "nome")
     private String nome;
 }
