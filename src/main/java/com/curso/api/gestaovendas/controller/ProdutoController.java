@@ -20,20 +20,26 @@ public class ProdutoController {
     @Autowired
     ProdutoService produtoService;
 
-    @ApiOperation(value = "Listar todos produtos")
+    @ApiOperation(value = "SalvarProduto")
+    @PostMapping
+    public ResponseEntity<Produto> salvar(@RequestBody Produto produto){
+        return new ResponseEntity<Produto>(produtoService.salvar(produto), HttpStatus.CREATED);
+    }
+
+    @ApiOperation(value = "ListarProdutos")
     @GetMapping("/getAll")
     public ResponseEntity<List<Produto>> getAllProdutos(){
         return new ResponseEntity<List<Produto>>(produtoService.getAllProdutos(), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Bucar produto por Descrição")
+    @ApiOperation(value = "BucarProdutoPorDescrição")
     @GetMapping("/getByNome")
     public ResponseEntity<List<Produto>> getByNome(@RequestParam String nome){
         return new ResponseEntity<List<Produto>>(produtoService.getByNome(nome), HttpStatus.OK);
     }
 
 
-    @ApiOperation(value = "Bucar produto por ID")
+    @ApiOperation(value = "BucarProdutoPorID")
     @GetMapping("/{id}")
     public ResponseEntity<Produto> getById(@PathVariable Long id){
         Optional<Produto>produtoOptional = produtoService.getIdProduto(id);

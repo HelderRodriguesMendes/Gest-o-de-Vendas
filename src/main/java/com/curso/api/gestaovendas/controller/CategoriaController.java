@@ -21,7 +21,7 @@ public class CategoriaController {
     @Autowired
     private CategoriaService categoriaService;
 
-    @ApiOperation(value = "Salvar")
+    @ApiOperation(value = "Salvar Categoria")
     @PostMapping
     public ResponseEntity<Categoria> salvar(@Valid @RequestBody Categoria categoria){
         return new ResponseEntity<Categoria>(categoriaService.salvar(categoria), HttpStatus.CREATED);

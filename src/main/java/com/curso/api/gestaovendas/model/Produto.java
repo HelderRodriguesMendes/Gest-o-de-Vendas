@@ -30,7 +30,7 @@ public class Produto implements Serializable {
     @Column(name = "observacao")
     private String observacao;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+    @ManyToOne
     @JoinColumn(name = "id_categoria", referencedColumnName = "id")
     private Categoria categoria;
 }

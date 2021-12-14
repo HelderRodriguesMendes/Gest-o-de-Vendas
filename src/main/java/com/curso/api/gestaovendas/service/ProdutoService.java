@@ -15,6 +15,9 @@ public class ProdutoService {
     @Autowired
     ProdutoRepository produtoRepository;
 
+    @Autowired
+    CategoriaService categoriaService;
+
     public List<Produto> getAllProdutos(){
         return produtoRepository.findAll();
     }
@@ -28,5 +31,11 @@ public class ProdutoService {
 
     public Optional<Produto> getIdProduto(Long id){
         return produtoRepository.findById(id);
+    }
+
+    public Produto salvar(Produto produto){
+        if(categoriaService.getById(produto.getCategoria().getId()).isEmpty()){
+            throw new EmptyResultDataAccessException(1);
+        }else return produtoRepository.save(produto);
     }
 }
