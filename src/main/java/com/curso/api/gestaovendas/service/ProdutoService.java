@@ -1,5 +1,7 @@
 package com.curso.api.gestaovendas.service;
 
+import com.curso.api.gestaovendas.exception.RegraNegocioException;
+import com.curso.api.gestaovendas.model.Categoria;
 import com.curso.api.gestaovendas.model.Produto;
 import com.curso.api.gestaovendas.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +36,22 @@ public class ProdutoService {
     }
 
     public Produto salvar(Produto produto){
+        validateCategoryExist(produto.getCategoria());
+        validaProdutoDuplicado(produto);
         return produtoRepository.save(produto);
+    }
+
+    private void validaProdutoDuplicado(Produto produto){
+        if(produtoRepository.findByCategoriaIdAndDescricao(produto.getCategoria().getId(), produto.getDescricao()).isPresent()){
+            throw new RegraNegocioException(String.format("O produto %s já está cadastrado", produto.getDescricao()));
+        }
+    }
+
+    private void validateCategoryExist(Categoria categoria){
+        if(categoria.getId() == null){
+            throw new RegraNegocioException("Informe a categoria do produto");
+        }else if(categoriaService.getById(categoria.getId()).isEmpty()){
+            throw new RegraNegocioException(String.format("A catetgoria %s informada não existe", categoria.getId()));
+        }
     }
 }

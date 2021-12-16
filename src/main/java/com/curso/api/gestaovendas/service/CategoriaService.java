@@ -49,7 +49,7 @@ public class CategoriaService {
         categoriaRepository.deleteById(id);
     }
 
-    public void categoriaIsPresentName(Categoria categoria){
+    private void categoriaIsPresentName(Categoria categoria){
         Categoria categoriaIsPresent = categoriaRepository.findByNome(categoria.getNome());
         if(categoriaIsPresent != null && categoriaIsPresent.getId() != categoria.getId()){
             throw new RegraNegocioException(String.format("A categoria %s já esta cadastrada", categoria.getNome()));

@@ -15,4 +15,6 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long> {
     @Transactional
     @Query(value = "select * from produto where descricao like %?1% order by descricao limit 100", nativeQuery = true)
     public Optional<List<Produto>>getByNome(String nome);
+
+    public Optional<Produto> findByCategoriaIdAndDescricao(Long idCategoria, String descricao);
 }
