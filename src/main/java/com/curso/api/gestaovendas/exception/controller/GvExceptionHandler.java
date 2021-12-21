@@ -23,6 +23,7 @@ import java.util.List;
 public class GvExceptionHandler extends ResponseEntityExceptionHandler {
 
     private static final String CONSTANT_VALIDATION_NOT_BLANK = "NotBlank";
+    private static final String CONSTANT_VALIDATION_NOT_NULL = "NotNull";
     private static final String CONSTANT_VALIDATION_LENGTH = "Length";
 
     @Override
@@ -67,6 +68,10 @@ public class GvExceptionHandler extends ResponseEntityExceptionHandler {
 
     private String MsgErrorUser(FieldError fieldError){
         if(fieldError.getCode().equals(CONSTANT_VALIDATION_NOT_BLANK)){
+            return fieldError.getDefaultMessage().concat(" é obrigatório");
+        }
+
+        if(fieldError.getCode().equals(CONSTANT_VALIDATION_NOT_NULL)){
             return fieldError.getDefaultMessage().concat(" é obrigatório");
         }
 

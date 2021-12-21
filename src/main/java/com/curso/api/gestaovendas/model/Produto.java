@@ -1,8 +1,11 @@
 package com.curso.api.gestaovendas.model;
 
 import lombok.Data;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Entity
@@ -15,18 +18,24 @@ public class Produto implements Serializable {
     @Column(name = "id")
     private Long id;
 
+    @NotBlank(message = "Descrição")
+    @Length(min = 3, max = 100, message = "Descrição")
     @Column(name = "descricao")
     private String descricao;
 
+    @NotNull(message = "Quantidade")
     @Column(name = "quantidade")
-    private int quantidade;
+    private Integer quantidade;
 
+    @NotNull(message = "Preço custo")
     @Column(name = "preco_custo")
-    private double precoCusto;
+    private Double precoCusto;
 
+    @NotNull(message = "Preço venda")
     @Column(name = "preco_venda")
-    private double precoVenda;
+    private Double precoVenda;
 
+    @Length(max = 500, message = "Observação")
     @Column(name = "observacao")
     private String observacao;
 
