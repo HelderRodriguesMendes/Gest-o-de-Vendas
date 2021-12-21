@@ -39,6 +39,7 @@ public class Produto implements Serializable {
     @Column(name = "observacao")
     private String observacao;
 
+    @NotNull(message = "Código da categoria")
     @ManyToOne
     @JoinColumn(name = "id_categoria", referencedColumnName = "id")
     private Categoria categoria;
