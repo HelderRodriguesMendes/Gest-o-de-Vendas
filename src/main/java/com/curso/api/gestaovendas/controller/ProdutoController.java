@@ -21,33 +21,36 @@ public class ProdutoController {
     @Autowired
     ProdutoService produtoService;
 
-    @ApiOperation(value = "SalvarProduto")
+    @ApiOperation(value = "Salvar um produto", nickname = "salvarProduto")
     @PostMapping
     public ResponseEntity<Produto> salvar(@Valid @RequestBody Produto produto){
         return new ResponseEntity<Produto>(produtoService.salvar(produto), HttpStatus.CREATED);
     }
 
-    @ApiOperation(value = "ListarProdutos")
+    @ApiOperation(value = "Listar todos os produtos", nickname = "listarProdutos")
     @GetMapping("/getAll")
     public ResponseEntity<List<Produto>> getAllProdutos(){
         return new ResponseEntity<List<Produto>>(produtoService.getAllProdutos(), HttpStatus.OK);
     }
 
-    @ApiOperation(value = "BucarProdutoPorDescrição")
+    @ApiOperation(value = "Bucar produto por descrição", nickname = "bucarProdutoPorDescrição")
     @GetMapping("/getByNome")
     public ResponseEntity<List<Produto>> getByNome(@RequestParam String nome){
         return new ResponseEntity<List<Produto>>(produtoService.getByNome(nome), HttpStatus.OK);
     }
 
-
-    @ApiOperation(value = "BucarProdutoPorID")
+    @ApiOperation(value = "Bucar produto por id", nickname = "bucarProdutoPorID")
     @GetMapping("/{id}")
     public ResponseEntity<Produto> getById(@PathVariable Long id){
         Optional<Produto>produtoOptional = produtoService.getIdProduto(id);
-
         return produtoOptional.isPresent() ? new ResponseEntity<Produto>(produtoOptional.get(), HttpStatus.OK) :
                 ResponseEntity.notFound().build();
     }
 
-
+    @ApiOperation(value = "Atualizar produto", nickname = "atualizarProduto")
+    @PutMapping("/{id}")
+    public ResponseEntity<Produto> atualizar(@PathVariable Long id, @RequestBody Produto produto){
+        produto.setId(id);
+        return new ResponseEntity<Produto>(produtoService.atualizar(produto), HttpStatus.OK);
+    }
 }

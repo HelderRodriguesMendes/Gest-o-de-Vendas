@@ -41,6 +41,12 @@ public class ProdutoService {
         return produtoRepository.save(produto);
     }
 
+    public Produto atualizar(Produto produto){
+        validateProdutoExist(produto.getId());
+        validateCategoryExist(produto.getCategoria());
+        return produtoRepository.save(produto);
+    }
+
     private void validaProdutoDuplicado(Produto produto){
         if(produtoRepository.findByCategoriaIdAndDescricao(produto.getCategoria().getId(), produto.getDescricao()).isPresent()){
             throw new RegraNegocioException(String.format("O produto %s já está cadastrado", produto.getDescricao()));
@@ -52,6 +58,12 @@ public class ProdutoService {
             throw new RegraNegocioException("Informe a categoria do produto");
         }else if(categoriaService.getById(categoria.getId()).isEmpty()){
             throw new RegraNegocioException(String.format("A catetgoria %s informada não existe", categoria.getId()));
+        }
+    }
+
+    private void validateProdutoExist(Long idProdudo){
+        if(getIdProduto(idProdudo).isEmpty()){
+            throw new EmptyResultDataAccessException(1);
         }
     }
 }
