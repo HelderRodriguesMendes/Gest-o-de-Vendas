@@ -47,6 +47,11 @@ public class ProdutoService {
         return produtoRepository.save(produto);
     }
 
+    public void deletar(Long idProduto){
+        validateProdutoExist(idProduto);
+        produtoRepository.deleteById(idProduto);
+    }
+
     private void validaProdutoDuplicado(Produto produto){
         if(produtoRepository.findByCategoriaIdAndDescricao(produto.getCategoria().getId(), produto.getDescricao()).isPresent()){
             throw new RegraNegocioException(String.format("O produto %s já está cadastrado", produto.getDescricao()));

@@ -24,33 +24,39 @@ public class ProdutoController {
     @ApiOperation(value = "Salvar um produto", nickname = "salvarProduto")
     @PostMapping
     public ResponseEntity<Produto> salvar(@Valid @RequestBody Produto produto){
-        return new ResponseEntity<Produto>(produtoService.salvar(produto), HttpStatus.CREATED);
+        return new ResponseEntity<>(produtoService.salvar(produto), HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "Listar todos os produtos", nickname = "listarProdutos")
     @GetMapping("/getAll")
     public ResponseEntity<List<Produto>> getAllProdutos(){
-        return new ResponseEntity<List<Produto>>(produtoService.getAllProdutos(), HttpStatus.OK);
+        return new ResponseEntity<>(produtoService.getAllProdutos(), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Bucar produto por descrição", nickname = "bucarProdutoPorDescrição")
     @GetMapping("/getByNome")
     public ResponseEntity<List<Produto>> getByNome(@RequestParam String nome){
-        return new ResponseEntity<List<Produto>>(produtoService.getByNome(nome), HttpStatus.OK);
+        return new ResponseEntity<>(produtoService.getByNome(nome), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Bucar produto por id", nickname = "bucarProdutoPorID")
     @GetMapping("/{id}")
     public ResponseEntity<Produto> getById(@PathVariable Long id){
         Optional<Produto>produtoOptional = produtoService.getIdProduto(id);
-        return produtoOptional.isPresent() ? new ResponseEntity<Produto>(produtoOptional.get(), HttpStatus.OK) :
-                ResponseEntity.notFound().build();
+        return produtoOptional.map(produto -> new ResponseEntity<>(produto, HttpStatus.OK)).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @ApiOperation(value = "Atualizar produto", nickname = "atualizarProduto")
     @PutMapping("/{id}")
     public ResponseEntity<Produto> atualizar(@PathVariable Long id, @RequestBody Produto produto){
         produto.setId(id);
-        return new ResponseEntity<Produto>(produtoService.atualizar(produto), HttpStatus.OK);
+        return new ResponseEntity<>(produtoService.atualizar(produto), HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "Deletar um produto", nickname = "deletarProduto")
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletar(@PathVariable Long id){
+        produtoService.deletar(id);
     }
 }
