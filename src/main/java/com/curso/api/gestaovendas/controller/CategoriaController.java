@@ -1,5 +1,6 @@
 package com.curso.api.gestaovendas.controller;
 
+import com.curso.api.gestaovendas.dto.CategoriaResponseDTO;
 import com.curso.api.gestaovendas.model.Categoria;
 import com.curso.api.gestaovendas.service.CategoriaService;
 import io.swagger.annotations.Api;
@@ -23,35 +24,34 @@ public class CategoriaController {
 
     @ApiOperation(value = "Salvar Categoria", nickname = "salvar")
     @PostMapping
-    public ResponseEntity<Categoria> salvar(@Valid @RequestBody Categoria categoria){
-        return new ResponseEntity<Categoria>(categoriaService.salvar(categoria), HttpStatus.CREATED);
+    public ResponseEntity<CategoriaResponseDTO> salvar(@Valid @RequestBody Categoria categoria){
+        return new ResponseEntity<CategoriaResponseDTO>(categoriaService.salvar(categoria), HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "Listar todas categorias", nickname = "listarCategorias")
     @GetMapping("/getAll")
-    public ResponseEntity<List<Categoria>> getAllCategoria(){
-        return new ResponseEntity<List<Categoria>>(categoriaService.getAllCategoria(), HttpStatus.OK);
+    public ResponseEntity<List<CategoriaResponseDTO>> getAllCategoria(){
+        return new ResponseEntity<List<CategoriaResponseDTO>>(categoriaService.getAllCategoria(), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Bucar categoria por ID", nickname = "bucarCategoriaId")
     @GetMapping("/{id}")
-    public ResponseEntity<Categoria> getById(@PathVariable Long id){
-        Optional<Categoria> optionalCategoria = categoriaService.getById(id);
-        return optionalCategoria.isPresent() ? new ResponseEntity<Categoria>(optionalCategoria.get(), HttpStatus.OK) :
-                ResponseEntity.notFound().build();
+    public ResponseEntity<CategoriaResponseDTO> getById(@PathVariable Long id){
+        CategoriaResponseDTO optionalCategoria = categoriaService.getById(id);
+         return new ResponseEntity<>(optionalCategoria, HttpStatus.OK);
     }
 
     @ApiOperation(value = "Bucar categoria por Nome", nickname = "bucarCategoriaNome")
     @GetMapping("/getNome")
-    public ResponseEntity<List<Categoria>> getByNome(@RequestParam String nome){
-        return new ResponseEntity<List<Categoria>>(categoriaService.findByNome(nome), HttpStatus.OK);
+    public ResponseEntity<List<CategoriaResponseDTO>> getByNome(@RequestParam String nome){
+        return new ResponseEntity<List<CategoriaResponseDTO>>(categoriaService.findByNome(nome), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Atualizar categoria", nickname = "atualizarCategoria")
     @PutMapping("/{id}")
-    public ResponseEntity<Categoria> atualizar(@PathVariable Long id, @RequestBody Categoria categoria){
+    public ResponseEntity<CategoriaResponseDTO> atualizar(@PathVariable Long id, @RequestBody Categoria categoria){
         categoria.setId(id);
-        return new ResponseEntity<Categoria>(categoriaService.atualizar(categoria), HttpStatus.OK);
+        return new ResponseEntity<CategoriaResponseDTO>(categoriaService.atualizar(categoria), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Deletar uma categoria", nickname = "deletarCategoria")

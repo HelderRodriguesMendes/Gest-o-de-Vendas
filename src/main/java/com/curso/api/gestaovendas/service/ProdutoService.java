@@ -1,5 +1,6 @@
 package com.curso.api.gestaovendas.service;
 
+import com.curso.api.gestaovendas.dto.ProdutoResponseDTO;
 import com.curso.api.gestaovendas.exception.RegraNegocioException;
 import com.curso.api.gestaovendas.model.Categoria;
 import com.curso.api.gestaovendas.model.Produto;
@@ -8,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ProdutoService {
@@ -20,31 +23,35 @@ public class ProdutoService {
     @Autowired
     CategoriaService categoriaService;
 
-    public List<Produto> getAllProdutos(){
-        return produtoRepository.findAll();
+    public List<ProdutoResponseDTO> getAllProdutos(){
+        return produtoRepository.findAll().stream().map(produto -> ProdutoResponseDTO.toDTO(produto)).collect(Collectors.toList());
     }
 
-    public List<Produto> getByNome(String nome){
+    public List<ProdutoResponseDTO> getByNome(String nome){
         Optional<List<Produto>> listOptional = produtoRepository.getByNome(nome);
         if(listOptional.isEmpty()){
             throw new EmptyResultDataAccessException(1);
-        }else return listOptional.get();
+        }else return listOptional.get().stream().map(produto -> ProdutoResponseDTO.toDTO(produto)).collect(Collectors.toList());
     }
 
-    public Optional<Produto> getIdProduto(Long id){
-        return produtoRepository.findById(id);
+    public Optional<ProdutoResponseDTO> getIdProduto(Long id){
+        Optional<Produto> produtoOptional = produtoRepository.findById(id);
+        if(produtoOptional.isEmpty()){
+            throw new EmptyResultDataAccessException(1);
+        }
+        return Optional.of(ProdutoResponseDTO.toDTO(produtoOptional.get()));
     }
 
-    public Produto salvar(Produto produto){
+    public ProdutoResponseDTO salvar(Produto produto){
         validateCategoryExist(produto.getCategoria());
         validaProdutoDuplicado(produto);
-        return produtoRepository.save(produto);
+        return ProdutoResponseDTO.toDTO(produtoRepository.save(produto));
     }
 
-    public Produto atualizar(Produto produto){
+    public ProdutoResponseDTO atualizar(Produto produto){
         validateProdutoExist(produto.getId());
         validateCategoryExist(produto.getCategoria());
-        return produtoRepository.save(produto);
+        return ProdutoResponseDTO.toDTO(produtoRepository.save(produto));
     }
 
     public void deletar(Long idProduto){
@@ -61,7 +68,7 @@ public class ProdutoService {
     private void validateCategoryExist(Categoria categoria){
         if(categoria.getId() == null){
             throw new RegraNegocioException("Informe a categoria do produto");
-        }else if(categoriaService.getById(categoria.getId()).isEmpty()){
+        }else if(categoriaService.getById(categoria.getId()) == null){
             throw new RegraNegocioException(String.format("A catetgoria %s informada não existe", categoria.getId()));
         }
     }

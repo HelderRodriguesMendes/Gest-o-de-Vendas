@@ -1,5 +1,6 @@
 package com.curso.api.gestaovendas.service;
 
+import com.curso.api.gestaovendas.dto.CategoriaResponseDTO;
 import com.curso.api.gestaovendas.exception.RegraNegocioException;
 import com.curso.api.gestaovendas.model.Categoria;
 import com.curso.api.gestaovendas.repository.CategoriaRepository;
@@ -7,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CategoriaService {
@@ -16,32 +19,39 @@ public class CategoriaService {
     @Autowired
     private CategoriaRepository categoriaRepository;
 
-    public Categoria salvar(Categoria categoria){
+    public CategoriaResponseDTO salvar(Categoria categoria){
         categoriaIsPresentName(categoria);
-        return categoriaRepository.save(categoria);
+        return CategoriaResponseDTO.toDTO(categoriaRepository.save(categoria));
     }
 
-    public List<Categoria> getAllCategoria(){
-        return categoriaRepository.findAll();
+    public List<CategoriaResponseDTO> getAllCategoria(){
+        return categoriaRepository.findAll().stream().map(categoria -> CategoriaResponseDTO.toDTO(categoria)).collect(Collectors.toList());
     }
 
-    public Optional<Categoria> getById(Long id){
-         return categoriaRepository.findById(id);
+    public CategoriaResponseDTO getById(Long id){
+        Optional<Categoria> categoriaOptional = categoriaRepository.findById(id);
+        if(categoriaOptional.isEmpty()){
+            throw new EmptyResultDataAccessException(1);
+        }
+        return CategoriaResponseDTO.toDTO(categoriaOptional.get());
     }
 
-    public List<Categoria> findByNome(String nome){
+    public List<CategoriaResponseDTO> findByNome(String nome){
         Optional<List<Categoria>> optionalCategorias = categoriaRepository.getByNome(nome);
         if(optionalCategorias.isEmpty()){
             throw new EmptyResultDataAccessException(1);
-        }else return optionalCategorias.get();
+        }else{
+            return optionalCategorias.stream().map(categoria -> CategoriaResponseDTO.toDTO((Categoria) categoria)).collect(Collectors.toList());
+        }
     }
 
-    public Categoria atualizar(Categoria categoria){
-        if(getById(categoria.getId()).isEmpty()){
+    public CategoriaResponseDTO atualizar(Categoria categoria){
+        if(getById(categoria.getId())== null){
             throw new EmptyResultDataAccessException(1);
         } else{
             categoriaIsPresentName(categoria);
-            return categoriaRepository.save(categoria);
+            Categoria categoriaSalva = categoriaRepository.save(categoria);
+            return CategoriaResponseDTO.toDTO(categoriaSalva);
         }
     }
 

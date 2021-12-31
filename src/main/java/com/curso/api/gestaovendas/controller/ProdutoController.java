@@ -1,5 +1,6 @@
 package com.curso.api.gestaovendas.controller;
 
+import com.curso.api.gestaovendas.dto.ProdutoResponseDTO;
 import com.curso.api.gestaovendas.model.Produto;
 import com.curso.api.gestaovendas.service.ProdutoService;
 import io.swagger.annotations.Api;
@@ -23,32 +24,32 @@ public class ProdutoController {
 
     @ApiOperation(value = "Salvar um produto", nickname = "salvarProduto")
     @PostMapping
-    public ResponseEntity<Produto> salvar(@Valid @RequestBody Produto produto){
+    public ResponseEntity<ProdutoResponseDTO> salvar(@Valid @RequestBody Produto produto){
         return new ResponseEntity<>(produtoService.salvar(produto), HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "Listar todos os produtos", nickname = "listarProdutos")
     @GetMapping("/getAll")
-    public ResponseEntity<List<Produto>> getAllProdutos(){
+    public ResponseEntity<List<ProdutoResponseDTO>> getAllProdutos(){
         return new ResponseEntity<>(produtoService.getAllProdutos(), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Bucar produto por descrição", nickname = "bucarProdutoPorDescrição")
     @GetMapping("/getByNome")
-    public ResponseEntity<List<Produto>> getByNome(@RequestParam String nome){
+    public ResponseEntity<List<ProdutoResponseDTO>> getByNome(@RequestParam String nome){
         return new ResponseEntity<>(produtoService.getByNome(nome), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Bucar produto por id", nickname = "bucarProdutoPorID")
     @GetMapping("/{id}")
-    public ResponseEntity<Produto> getById(@PathVariable Long id){
-        Optional<Produto>produtoOptional = produtoService.getIdProduto(id);
+    public ResponseEntity<ProdutoResponseDTO> getById(@PathVariable Long id){
+        Optional<ProdutoResponseDTO>produtoOptional = produtoService.getIdProduto(id);
         return produtoOptional.map(produto -> new ResponseEntity<>(produto, HttpStatus.OK)).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @ApiOperation(value = "Atualizar produto", nickname = "atualizarProduto")
     @PutMapping("/{id}")
-    public ResponseEntity<Produto> atualizar(@PathVariable Long id, @RequestBody Produto produto){
+    public ResponseEntity<ProdutoResponseDTO> atualizar(@PathVariable Long id, @RequestBody Produto produto){
         produto.setId(id);
         return new ResponseEntity<>(produtoService.atualizar(produto), HttpStatus.OK);
     }
