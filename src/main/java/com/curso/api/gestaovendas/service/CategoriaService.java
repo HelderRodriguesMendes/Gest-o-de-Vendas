@@ -56,7 +56,7 @@ public class CategoriaService {
     }
 
     public void deletar(Long id){
-        categoriaRepository.deleteById(id);
+        categoriaRepository.deleteById(getById(id).getId());
     }
 
     private void categoriaIsPresentName(Categoria categoria){
