@@ -1,14 +1,14 @@
-package com.curso.api.gestaovendas.util;
+package com.curso.api.gestaovendas.util.config;
 
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-public class SwaggerUiWebMvcConfigurer implements WebMvcConfigurer {
+public class SwaggerUiWebMvcConfig implements WebMvcConfigurer {
     private final String baseUrl;
 
-    public SwaggerUiWebMvcConfigurer(String baseUrl) {
+    public SwaggerUiWebMvcConfig(String baseUrl) {
         this.baseUrl = baseUrl;
     }
 

@@ -41,8 +41,4 @@ public class ProdutoResponseDTO {
 
     @ApiModelProperty(value = "Categoria")
     private Categoria categoria;
-
-    public static ProdutoResponseDTO toDTO(Produto produto){
-        return new ProdutoResponseDTO(produto.getId(), produto.getDescricao(), produto.getQuantidade(), produto.getPrecoCusto(), produto.getPrecoVenda(), produto.getObservacao(), produto.getCategoria());
-    }
 }

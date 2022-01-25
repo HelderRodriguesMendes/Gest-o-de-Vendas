@@ -5,6 +5,7 @@ import com.curso.api.gestaovendas.exception.RegraNegocioException;
 import com.curso.api.gestaovendas.model.Categoria;
 import com.curso.api.gestaovendas.model.Produto;
 import com.curso.api.gestaovendas.repository.ProdutoRepository;
+import com.curso.api.gestaovendas.util.Convert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
@@ -23,35 +24,37 @@ public class ProdutoService {
     @Autowired
     CategoriaService categoriaService;
 
+    Convert convert = new Convert();
+
     public List<ProdutoResponseDTO> getAllProdutos(){
-        return produtoRepository.findAll().stream().map(produto -> ProdutoResponseDTO.toDTO(produto)).collect(Collectors.toList());
+        return produtoRepository.findAll().stream().map(produto -> convert.toProdutoResponseDTO(produto)).collect(Collectors.toList());
     }
 
     public List<ProdutoResponseDTO> getByNome(String nome){
         Optional<List<Produto>> listOptional = produtoRepository.getByNome(nome);
         if(listOptional.isEmpty()){
             throw new EmptyResultDataAccessException(1);
-        }else return listOptional.get().stream().map(produto -> ProdutoResponseDTO.toDTO(produto)).collect(Collectors.toList());
+        }else return listOptional.get().stream().map(produto -> convert.toProdutoResponseDTO(produto)).collect(Collectors.toList());
     }
 
-    public Optional<ProdutoResponseDTO> getIdProduto(Long id){
+    public ProdutoResponseDTO getIdProduto(Long id){
         Optional<Produto> produtoOptional = produtoRepository.findById(id);
         if(produtoOptional.isEmpty()){
             throw new EmptyResultDataAccessException(1);
         }
-        return Optional.of(ProdutoResponseDTO.toDTO(produtoOptional.get()));
+        return convert.toProdutoResponseDTO(produtoOptional.get());
     }
 
     public ProdutoResponseDTO salvar(Produto produto){
         validateCategoryExist(produto.getCategoria());
         validaProdutoDuplicado(produto);
-        return ProdutoResponseDTO.toDTO(produtoRepository.save(produto));
+        return convert.toProdutoResponseDTO(produtoRepository.save(produto));
     }
 
     public ProdutoResponseDTO atualizar(Produto produto){
         validateProdutoExist(produto.getId());
         validateCategoryExist(produto.getCategoria());
-        return ProdutoResponseDTO.toDTO(produtoRepository.save(produto));
+        return convert.toProdutoResponseDTO(produtoRepository.save(produto));
     }
 
     public void deletar(Long idProduto){
@@ -60,7 +63,8 @@ public class ProdutoService {
     }
 
     private void validaProdutoDuplicado(Produto produto){
-        if(produtoRepository.findByCategoriaIdAndDescricao(produto.getCategoria().getId(), produto.getDescricao()).isPresent()){
+        Optional<Produto> produtoOptional = produtoRepository.findByCategoriaIdAndDescricao(produto.getCategoria().getId(), produto.getDescricao());
+        if(produtoOptional.isPresent() && produto.getId() != produtoOptional.get().getId()){
             throw new RegraNegocioException(String.format("O produto %s já está cadastrado", produto.getDescricao()));
         }
     }
@@ -74,7 +78,7 @@ public class ProdutoService {
     }
 
     private void validateProdutoExist(Long idProdudo){
-        if(getIdProduto(idProdudo).isEmpty()){
+        if(getIdProduto(idProdudo) == null){
             throw new EmptyResultDataAccessException(1);
         }
     }

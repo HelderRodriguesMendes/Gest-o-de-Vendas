@@ -1,4 +1,4 @@
-package com.curso.api.gestaovendas.util;
+package com.curso.api.gestaovendas.util.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

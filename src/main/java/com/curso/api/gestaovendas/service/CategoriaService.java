@@ -4,6 +4,7 @@ import com.curso.api.gestaovendas.dto.CategoriaResponseDTO;
 import com.curso.api.gestaovendas.exception.RegraNegocioException;
 import com.curso.api.gestaovendas.model.Categoria;
 import com.curso.api.gestaovendas.repository.CategoriaRepository;
+import com.curso.api.gestaovendas.util.Convert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
@@ -19,13 +20,15 @@ public class CategoriaService {
     @Autowired
     private CategoriaRepository categoriaRepository;
 
+    Convert convert = new Convert();
+
     public CategoriaResponseDTO salvar(Categoria categoria){
         categoriaIsPresentName(categoria);
-        return CategoriaResponseDTO.toDTO(categoriaRepository.save(categoria));
+        return convert.toCategoriaResponseDTO(categoriaRepository.save(categoria));
     }
 
-    public List<CategoriaResponseDTO> getAllCategoria(){
-        return categoriaRepository.findAll().stream().map(categoria -> CategoriaResponseDTO.toDTO(categoria)).collect(Collectors.toList());
+    public List<CategoriaResponseDTO> getAll(){
+        return categoriaRepository.findAll().stream().map(categoria -> convert.toCategoriaResponseDTO(categoria)).collect(Collectors.toList());
     }
 
     public CategoriaResponseDTO getById(Long id){
@@ -33,7 +36,7 @@ public class CategoriaService {
         if(categoriaOptional.isEmpty()){
             throw new EmptyResultDataAccessException(1);
         }
-        return CategoriaResponseDTO.toDTO(categoriaOptional.get());
+        return convert.toCategoriaResponseDTO(categoriaOptional.get());
     }
 
     public List<CategoriaResponseDTO> findByNome(String nome){
@@ -41,7 +44,7 @@ public class CategoriaService {
         if(optionalCategorias.isEmpty()){
             throw new EmptyResultDataAccessException(1);
         }else{
-            return optionalCategorias.stream().map(categoria -> CategoriaResponseDTO.toDTO((Categoria) categoria)).collect(Collectors.toList());
+            return optionalCategorias.stream().map(categoria -> convert.toCategoriaResponseDTO((Categoria) categoria)).collect(Collectors.toList());
         }
     }
 
@@ -51,7 +54,7 @@ public class CategoriaService {
         } else{
             categoriaIsPresentName(categoria);
             Categoria categoriaSalva = categoriaRepository.save(categoria);
-            return CategoriaResponseDTO.toDTO(categoriaSalva);
+            return convert.toCategoriaResponseDTO(categoriaSalva);
         }
     }
 

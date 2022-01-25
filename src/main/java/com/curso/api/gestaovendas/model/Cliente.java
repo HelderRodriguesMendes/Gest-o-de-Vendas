@@ -28,6 +28,11 @@ public class Cliente implements Serializable {
     @Column(name = "ativo")
     private Boolean ativo;
 
-    @Embedded
-    private Endereco endereco;
+    private String logradouro;
+    private Integer numero;
+    private String complemento;
+    private String bairro;
+    private String cep;
+    private String cidade;
+    private String estado;
 }

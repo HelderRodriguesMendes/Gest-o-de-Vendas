@@ -24,13 +24,13 @@ public class CategoriaController {
     @ApiOperation(value = "Salvar Categoria", nickname = "salvar")
     @PostMapping
     public ResponseEntity<CategoriaResponseDTO> salvar(@Valid @RequestBody Categoria categoria){
-        return new ResponseEntity<CategoriaResponseDTO>(categoriaService.salvar(categoria), HttpStatus.CREATED);
+        return new ResponseEntity<>(categoriaService.salvar(categoria), HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "Listar todas categorias", nickname = "listarCategorias")
     @GetMapping("/getAll")
     public ResponseEntity<List<CategoriaResponseDTO>> getAllCategoria(){
-        return new ResponseEntity<List<CategoriaResponseDTO>>(categoriaService.getAllCategoria(), HttpStatus.OK);
+        return new ResponseEntity<>(categoriaService.getAll(), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Bucar categoria por ID", nickname = "bucarCategoriaId")
@@ -40,17 +40,17 @@ public class CategoriaController {
          return new ResponseEntity<>(optionalCategoria, HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Bucar categoria por Nome", nickname = "bucarCategoriaNome")
+    @ApiOperation(value = "Bucar categoria por nome", nickname = "bucarCategoriaNome")
     @GetMapping("/getNome")
     public ResponseEntity<List<CategoriaResponseDTO>> getByNome(@RequestParam String nome){
-        return new ResponseEntity<List<CategoriaResponseDTO>>(categoriaService.findByNome(nome), HttpStatus.OK);
+        return new ResponseEntity<>(categoriaService.findByNome(nome), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Atualizar categoria", nickname = "atualizarCategoria")
     @PutMapping("/{id}")
     public ResponseEntity<CategoriaResponseDTO> atualizar(@PathVariable Long id, @RequestBody Categoria categoria){
         categoria.setId(id);
-        return new ResponseEntity<CategoriaResponseDTO>(categoriaService.atualizar(categoria), HttpStatus.OK);
+        return new ResponseEntity<>(categoriaService.atualizar(categoria), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Deletar uma categoria", nickname = "deletarCategoria")

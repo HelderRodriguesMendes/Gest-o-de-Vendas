@@ -18,8 +18,4 @@ public class CategoriaResponseDTO {
 
     @ApiModelProperty(value = "Nome")
     private String nome;
-
-    public static CategoriaResponseDTO toDTO(Categoria categoria){
-        return new CategoriaResponseDTO(categoria.getId(), categoria.getNome());
-    }
 }
