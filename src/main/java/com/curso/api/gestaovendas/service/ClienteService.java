@@ -7,6 +7,9 @@ import com.curso.api.gestaovendas.repository.ClienteRepository;
 import com.curso.api.gestaovendas.util.Convert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,8 +24,9 @@ public class ClienteService {
 
     Convert convert = new Convert();
 
-    public List<ClienteResponseDTO> getAll(){
-        return clienteRepository.findAll().stream().map(cliente -> convert.toClienteResponseDTO(cliente)).collect(Collectors.toList());
+    public Page<ClienteResponseDTO> getAll(Pageable pageable){
+        List<ClienteResponseDTO> clienteResponseDTOS = clienteRepository.findAll().stream().map(cliente -> convert.toClienteResponseDTO(cliente)).collect(Collectors.toList());
+        return new PageImpl<>(clienteResponseDTOS);
     }
 
     public ClienteResponseDTO getById(Long id){

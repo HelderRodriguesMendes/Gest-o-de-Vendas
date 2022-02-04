@@ -8,6 +8,10 @@ import com.curso.api.gestaovendas.util.Convert;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,8 +37,8 @@ public class CategoriaController {
 
     @ApiOperation(value = "Listar todas categorias", nickname = "listarCategorias")
     @GetMapping("/getAll")
-    public ResponseEntity<List<CategoriaResponseDTO>> getAllCategoria(){
-        return new ResponseEntity<>(categoriaService.getAll(), HttpStatus.OK);
+    public ResponseEntity<Page<CategoriaResponseDTO>> getAllCategoria(@PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable pageable){
+        return new ResponseEntity<>(categoriaService.getAll(pageable), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Bucar categoria por ID", nickname = "bucarCategoriaId")

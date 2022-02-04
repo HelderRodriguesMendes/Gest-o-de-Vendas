@@ -8,6 +8,9 @@ import com.curso.api.gestaovendas.repository.ProdutoRepository;
 import com.curso.api.gestaovendas.util.Convert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,8 +28,9 @@ public class ProdutoService {
 
     Convert convert = new Convert();
 
-    public List<ProdutoResponseDTO> getAllProdutos(){
-        return produtoRepository.findAll().stream().map(produto -> convert.toProdutoResponseDTO(produto)).collect(Collectors.toList());
+    public Page<ProdutoResponseDTO> getAllProdutos(Pageable pageable){
+        List<ProdutoResponseDTO> produtoResponseDTOS = produtoRepository.findAll().stream().map(produto -> convert.toProdutoResponseDTO(produto)).collect(Collectors.toList());
+        return new PageImpl<>(produtoResponseDTOS);
     }
 
     public List<ProdutoResponseDTO> getByNome(String nome){

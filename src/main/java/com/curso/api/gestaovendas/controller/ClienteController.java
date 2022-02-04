@@ -8,6 +8,10 @@ import com.curso.api.gestaovendas.util.Convert;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,8 +31,8 @@ public class ClienteController {
 
     @ApiOperation(value = "Listar todos os clientes", nickname = "listarClientes")
     @GetMapping("/getAll")
-    public ResponseEntity<List<ClienteResponseDTO>>getAll(){
-        return new ResponseEntity<>(clienteService.getAll(), HttpStatus.OK);
+    public ResponseEntity<Page<ClienteResponseDTO>>getAll(@PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable pageable){
+        return new ResponseEntity<>(clienteService.getAll(pageable), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Bucar cliente por ID", nickname = "bucarClienteId")

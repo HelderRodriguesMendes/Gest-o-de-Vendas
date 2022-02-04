@@ -8,6 +8,10 @@ import com.curso.api.gestaovendas.util.Convert;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,8 +37,8 @@ public class ProdutoController {
 
     @ApiOperation(value = "Listar todos os produtos", nickname = "listarProdutos")
     @GetMapping("/getAll")
-    public ResponseEntity<List<ProdutoResponseDTO>> getAllProdutos(){
-        return new ResponseEntity<>(produtoService.getAllProdutos(), HttpStatus.OK);
+    public ResponseEntity<Page<ProdutoResponseDTO>> getAllProdutos(@PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable pageable){
+        return new ResponseEntity<>(produtoService.getAllProdutos(pageable), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Bucar produto por descrição", nickname = "bucarProdutoPorDescrição")

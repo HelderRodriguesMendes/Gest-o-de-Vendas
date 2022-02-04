@@ -7,6 +7,9 @@ import com.curso.api.gestaovendas.repository.CategoriaRepository;
 import com.curso.api.gestaovendas.util.Convert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,8 +29,9 @@ public class CategoriaService {
         return convert.toCategoriaResponseDTO(categoriaRepository.save(categoria));
     }
 
-    public List<CategoriaResponseDTO> getAll(){
-        return categoriaRepository.findAll().stream().map(categoria -> convert.toCategoriaResponseDTO(categoria)).collect(Collectors.toList());
+    public Page<CategoriaResponseDTO> getAll(Pageable pageable){
+        List<CategoriaResponseDTO> categoriaResponseDTOS = categoriaRepository.findAll(pageable).stream().map(categoria -> convert.toCategoriaResponseDTO(categoria)).collect(Collectors.toList());
+        return new PageImpl<>(categoriaResponseDTOS);
     }
 
     public CategoriaResponseDTO getById(Long id){
