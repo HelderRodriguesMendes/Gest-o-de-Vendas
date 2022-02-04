@@ -29,7 +29,7 @@ public class ProdutoService {
     Convert convert = new Convert();
 
     public Page<ProdutoResponseDTO> getAllProdutos(Pageable pageable){
-        List<ProdutoResponseDTO> produtoResponseDTOS = produtoRepository.findAll().stream().map(produto -> convert.toProdutoResponseDTO(produto)).collect(Collectors.toList());
+        List<ProdutoResponseDTO> produtoResponseDTOS = produtoRepository.findAll(pageable).stream().map(produto -> convert.toProdutoResponseDTO(produto)).collect(Collectors.toList());
         return new PageImpl<>(produtoResponseDTOS);
     }
 

@@ -25,7 +25,7 @@ public class ClienteService {
     Convert convert = new Convert();
 
     public Page<ClienteResponseDTO> getAll(Pageable pageable){
-        List<ClienteResponseDTO> clienteResponseDTOS = clienteRepository.findAll().stream().map(cliente -> convert.toClienteResponseDTO(cliente)).collect(Collectors.toList());
+        List<ClienteResponseDTO> clienteResponseDTOS = clienteRepository.findAll(pageable).stream().map(cliente -> convert.toClienteResponseDTO(cliente)).collect(Collectors.toList());
         return new PageImpl<>(clienteResponseDTOS);
     }
 
