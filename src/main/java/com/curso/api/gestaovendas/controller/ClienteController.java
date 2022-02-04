@@ -1,8 +1,10 @@
 package com.curso.api.gestaovendas.controller;
 
-import com.curso.api.gestaovendas.dto.ClienteResponseDTO;
+import com.curso.api.gestaovendas.requestDTO.ClienteRequestDTO;
+import com.curso.api.gestaovendas.responseDTO.ClienteResponseDTO;
 import com.curso.api.gestaovendas.model.Cliente;
 import com.curso.api.gestaovendas.service.ClienteService;
+import com.curso.api.gestaovendas.util.Convert;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/cliente")
 public class ClienteController {
+
+    Convert convert = new Convert();
 
     @Autowired
     private ClienteService clienteService;
@@ -51,7 +55,7 @@ public class ClienteController {
 
     @ApiOperation(value = "Salvar cliente", nickname = "salvarCliente")
     @PostMapping
-    public ResponseEntity<ClienteResponseDTO>save(@Valid @RequestBody Cliente cliente){
-        return new ResponseEntity<>(clienteService.save(cliente), HttpStatus.CREATED);
+    public ResponseEntity<ClienteResponseDTO>save(@Valid @RequestBody ClienteRequestDTO clienteRequestDTO){
+        return new ResponseEntity<>(clienteService.save(convert.toCliente(clienteRequestDTO)), HttpStatus.CREATED);
     }
 }

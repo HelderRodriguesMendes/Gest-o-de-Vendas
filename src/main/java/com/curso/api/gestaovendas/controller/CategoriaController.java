@@ -1,8 +1,10 @@
 package com.curso.api.gestaovendas.controller;
 
-import com.curso.api.gestaovendas.dto.CategoriaResponseDTO;
+import com.curso.api.gestaovendas.requestDTO.CategoriaRequestDTO;
+import com.curso.api.gestaovendas.responseDTO.CategoriaResponseDTO;
 import com.curso.api.gestaovendas.model.Categoria;
 import com.curso.api.gestaovendas.service.CategoriaService;
+import com.curso.api.gestaovendas.util.Convert;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,13 +20,15 @@ import java.util.List;
 @RequestMapping("/categoria")
 public class CategoriaController {
 
+    Convert convert = new Convert();
+
     @Autowired
     private CategoriaService categoriaService;
 
     @ApiOperation(value = "Salvar Categoria", nickname = "salvar")
     @PostMapping
-    public ResponseEntity<CategoriaResponseDTO> salvar(@Valid @RequestBody Categoria categoria){
-        return new ResponseEntity<>(categoriaService.salvar(categoria), HttpStatus.CREATED);
+    public ResponseEntity<CategoriaResponseDTO> salvar(@Valid @RequestBody CategoriaRequestDTO categoriaRequestDTO){
+        return new ResponseEntity<>(categoriaService.salvar(convert.toCategoria(categoriaRequestDTO)), HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "Listar todas categorias", nickname = "listarCategorias")
@@ -48,9 +52,9 @@ public class CategoriaController {
 
     @ApiOperation(value = "Atualizar categoria", nickname = "atualizarCategoria")
     @PutMapping("/{id}")
-    public ResponseEntity<CategoriaResponseDTO> atualizar(@PathVariable Long id, @RequestBody Categoria categoria){
-        categoria.setId(id);
-        return new ResponseEntity<>(categoriaService.atualizar(categoria), HttpStatus.OK);
+    public ResponseEntity<CategoriaResponseDTO> atualizar(@PathVariable Long id, @RequestBody CategoriaRequestDTO categoriaRequestDTO){
+        categoriaRequestDTO.setId(id);
+        return new ResponseEntity<>(categoriaService.atualizar(convert.toCategoria(categoriaRequestDTO)), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Deletar uma categoria", nickname = "deletarCategoria")

@@ -1,6 +1,6 @@
 package com.curso.api.gestaovendas.service;
 
-import com.curso.api.gestaovendas.dto.ClienteResponseDTO;
+import com.curso.api.gestaovendas.responseDTO.ClienteResponseDTO;
 import com.curso.api.gestaovendas.exception.RegraNegocioException;
 import com.curso.api.gestaovendas.model.Cliente;
 import com.curso.api.gestaovendas.repository.ClienteRepository;

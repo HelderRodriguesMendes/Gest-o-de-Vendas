@@ -1,8 +1,10 @@
 package com.curso.api.gestaovendas.controller;
 
-import com.curso.api.gestaovendas.dto.ProdutoResponseDTO;
+import com.curso.api.gestaovendas.requestDTO.ProdutoRequestDTO;
+import com.curso.api.gestaovendas.responseDTO.ProdutoResponseDTO;
 import com.curso.api.gestaovendas.model.Produto;
 import com.curso.api.gestaovendas.service.ProdutoService;
+import com.curso.api.gestaovendas.util.Convert;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @Api(tags = "Produto")
 @RestController
@@ -22,10 +23,12 @@ public class ProdutoController {
     @Autowired
     ProdutoService produtoService;
 
+    Convert convert = new Convert();
+
     @ApiOperation(value = "Salvar um produto", nickname = "salvarProduto")
     @PostMapping
-    public ResponseEntity<ProdutoResponseDTO> salvar(@Valid @RequestBody Produto produto){
-        return new ResponseEntity<>(produtoService.salvar(produto), HttpStatus.CREATED);
+    public ResponseEntity<ProdutoResponseDTO> salvar(@Valid @RequestBody ProdutoRequestDTO produtoRequestDTO){
+        return new ResponseEntity<>(produtoService.salvar(convert.toProduto(produtoRequestDTO)), HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "Listar todos os produtos", nickname = "listarProdutos")
@@ -48,9 +51,9 @@ public class ProdutoController {
 
     @ApiOperation(value = "Atualizar produto", nickname = "atualizarProduto")
     @PutMapping("/{id}")
-    public ResponseEntity<ProdutoResponseDTO> atualizar(@PathVariable Long id, @RequestBody Produto produto){
-        produto.setId(id);
-        return new ResponseEntity<>(produtoService.atualizar(produto), HttpStatus.OK);
+    public ResponseEntity<ProdutoResponseDTO> atualizar(@PathVariable Long id, @RequestBody ProdutoRequestDTO produtoRequestDTO){
+        produtoRequestDTO.setId(id);
+        return new ResponseEntity<>(produtoService.atualizar(convert.toProduto(produtoRequestDTO)), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Deletar um produto", nickname = "deletarProduto")

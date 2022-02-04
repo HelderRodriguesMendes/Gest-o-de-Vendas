@@ -1,13 +1,15 @@
 package com.curso.api.gestaovendas.util;
 
-import com.curso.api.gestaovendas.dto.CategoriaResponseDTO;
-import com.curso.api.gestaovendas.dto.ClienteResponseDTO;
-import com.curso.api.gestaovendas.dto.ProdutoResponseDTO;
+import com.curso.api.gestaovendas.requestDTO.CategoriaRequestDTO;
+import com.curso.api.gestaovendas.requestDTO.ClienteRequestDTO;
+import com.curso.api.gestaovendas.requestDTO.ProdutoRequestDTO;
+import com.curso.api.gestaovendas.responseDTO.CategoriaResponseDTO;
+import com.curso.api.gestaovendas.responseDTO.ClienteResponseDTO;
+import com.curso.api.gestaovendas.responseDTO.ProdutoResponseDTO;
 import com.curso.api.gestaovendas.model.Categoria;
 import com.curso.api.gestaovendas.model.Cliente;
 import com.curso.api.gestaovendas.model.Produto;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class Convert {
 
@@ -17,11 +19,27 @@ public class Convert {
         return modelMapper.map(cliente, ClienteResponseDTO.class);
     }
 
+    public Cliente toCliente(ClienteRequestDTO clienteRequestDTO){
+        return modelMapper.map(clienteRequestDTO, Cliente.class);
+    }
+
+    //###########################################################################
+
     public CategoriaResponseDTO toCategoriaResponseDTO(Categoria categoria){
         return modelMapper.map(categoria, CategoriaResponseDTO.class);
     }
 
+    public Categoria toCategoria(CategoriaRequestDTO categoriaRequestDTO){
+        return modelMapper.map(categoriaRequestDTO, Categoria.class);
+    }
+
+    //###########################################################################
+
     public ProdutoResponseDTO toProdutoResponseDTO(Produto produto){
         return modelMapper.map(produto, ProdutoResponseDTO.class);
+    }
+
+    public Produto toProduto(ProdutoRequestDTO produtoRequestDTO){
+        return modelMapper.map(produtoRequestDTO, Produto.class);
     }
 }

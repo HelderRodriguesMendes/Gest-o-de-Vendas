@@ -1,6 +1,6 @@
 package com.curso.api.gestaovendas.service;
 
-import com.curso.api.gestaovendas.dto.ProdutoResponseDTO;
+import com.curso.api.gestaovendas.responseDTO.ProdutoResponseDTO;
 import com.curso.api.gestaovendas.exception.RegraNegocioException;
 import com.curso.api.gestaovendas.model.Categoria;
 import com.curso.api.gestaovendas.model.Produto;
@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;

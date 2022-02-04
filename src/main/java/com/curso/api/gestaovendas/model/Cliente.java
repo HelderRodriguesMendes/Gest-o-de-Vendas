@@ -1,10 +1,8 @@
 package com.curso.api.gestaovendas.model;
 
 import lombok.Data;
-import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 @Entity
@@ -16,23 +14,33 @@ public class Cliente implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @NotBlank(message = "Nome")
-    @Length(min = 3, max = 50, message = "Nome")
     @Column(name = "nome")
     private String nome;
 
-    @NotBlank(message = "Telefone")
     @Column(name = "telefone")
     private String telefone;
 
     @Column(name = "ativo")
     private Boolean ativo;
 
+    @Column(name = "logradouro")
     private String logradouro;
+
+    @Column(name = "numero")
     private Integer numero;
+
+    @Column(name = "complemento")
     private String complemento;
+
+    @Column(name = "bairro")
     private String bairro;
+
+    @Column(name = "cep")
     private String cep;
+
+    @Column(name = "cidade")
     private String cidade;
+
+    @Column(name = "estado")
     private String estado;
 }

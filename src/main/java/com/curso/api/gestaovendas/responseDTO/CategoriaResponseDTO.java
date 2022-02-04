@@ -1,6 +1,5 @@
-package com.curso.api.gestaovendas.dto;
+package com.curso.api.gestaovendas.responseDTO;
 
-import com.curso.api.gestaovendas.model.Categoria;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;

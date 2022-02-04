@@ -1,13 +1,11 @@
-package com.curso.api.gestaovendas.dto;
+package com.curso.api.gestaovendas.responseDTO;
 
-import com.curso.api.gestaovendas.model.Cliente;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Embedded;
 import java.io.Serializable;
 
 @Data
