@@ -32,6 +32,9 @@ public class Convert {
     public Categoria toCategoria(CategoriaRequestDTO categoriaRequestDTO){
         return modelMapper.map(categoriaRequestDTO, Categoria.class);
     }
+    public Categoria toCategoria(CategoriaResponseDTO categoriaResponseDTO){
+        return modelMapper.map(categoriaResponseDTO, Categoria.class);
+    }
 
     //###########################################################################
 

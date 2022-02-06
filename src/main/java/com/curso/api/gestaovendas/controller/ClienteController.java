@@ -62,4 +62,11 @@ public class ClienteController {
     public ResponseEntity<ClienteResponseDTO>save(@Valid @RequestBody ClienteRequestDTO clienteRequestDTO){
         return new ResponseEntity<>(clienteService.save(convert.toCliente(clienteRequestDTO)), HttpStatus.CREATED);
     }
+
+    @ApiOperation(value = "Alterar cliente", nickname = "salvarCliente")
+    @PutMapping("/{id}")
+    public ResponseEntity<ClienteResponseDTO>atualizar(@PathVariable Long id, @RequestBody ClienteRequestDTO clienteRequestDTO){
+        clienteRequestDTO.setId(id);
+        return new ResponseEntity<>(clienteService.atualizar(convert.toCliente(clienteRequestDTO)), HttpStatus.CREATED);
+    }
 }

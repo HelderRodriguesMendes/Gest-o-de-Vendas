@@ -51,7 +51,10 @@ public class ProdutoService {
     public ProdutoResponseDTO salvar(Produto produto){
         validateCategoryExist(produto.getCategoria());
         validaProdutoDuplicado(produto);
-        return convert.toProdutoResponseDTO(produtoRepository.save(produto));
+        Produto produtoSave = produtoRepository.save(produto);
+        Categoria categoria = convert.toCategoria(categoriaService.getById(produtoSave.getCategoria().getId()));
+        produtoSave.setCategoria(categoria);
+        return convert.toProdutoResponseDTO(produtoSave);
     }
 
     public ProdutoResponseDTO atualizar(Produto produto){

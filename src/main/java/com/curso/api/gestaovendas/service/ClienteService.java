@@ -59,11 +59,21 @@ public class ClienteService {
         validarClienteDuplicado(cliente);
         return convert.toClienteResponseDTO(clienteRepository.save(cliente));
     }
+    public ClienteResponseDTO atualizar(Cliente cliente){
+        validarClienteExiste(cliente.getId());
+        return convert.toClienteResponseDTO(clienteRepository.save(cliente));
+    }
 
     private void validarClienteDuplicado(Cliente cliente){
         Optional<Cliente> clienteBanco = clienteRepository.findByNome(cliente.getNome());
         if (clienteBanco.isPresent() && cliente.getId() != clienteBanco.get().getId()){
             throw new RegraNegocioException(String.format("O cliente %s já está cadastrado", cliente.getNome()));
+        }
+    }
+
+    private void validarClienteExiste(Long id){
+        if (!clienteRepository.findById(id).isPresent()){
+            throw new RegraNegocioException(String.format("A catetgoria %s informada não existe", id));
         }
     }
 
