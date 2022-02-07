@@ -50,7 +50,7 @@ public class ProdutoController {
     @ApiOperation(value = "Bucar produto por id", nickname = "bucarProdutoPorID")
     @GetMapping("/{id}")
     public ResponseEntity<ProdutoResponseDTO> getById(@PathVariable Long id){
-        return  new ResponseEntity<>(produtoService.getIdProduto(id), HttpStatus.OK);
+        return  new ResponseEntity<>(produtoService.getById(id), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Atualizar produto", nickname = "atualizarProduto")

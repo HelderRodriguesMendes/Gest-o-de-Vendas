@@ -60,20 +60,23 @@ public class ClienteService {
         return convert.toClienteResponseDTO(clienteRepository.save(cliente));
     }
     public ClienteResponseDTO atualizar(Cliente cliente){
-        validarClienteExiste(cliente.getId());
+        if(getById(cliente.getId()) == null){
+            throw new EmptyResultDataAccessException(1);
+        }
         return convert.toClienteResponseDTO(clienteRepository.save(cliente));
+    }
+
+    public void deletar(Long id){
+        if(getById(id) == null){
+            throw new EmptyResultDataAccessException(1);
+        }
+        clienteRepository.deleteById(getById(id).getId());
     }
 
     private void validarClienteDuplicado(Cliente cliente){
         Optional<Cliente> clienteBanco = clienteRepository.findByNome(cliente.getNome());
         if (clienteBanco.isPresent() && cliente.getId() != clienteBanco.get().getId()){
             throw new RegraNegocioException(String.format("O cliente %s já está cadastrado", cliente.getNome()));
-        }
-    }
-
-    private void validarClienteExiste(Long id){
-        if (!clienteRepository.findById(id).isPresent()){
-            throw new RegraNegocioException(String.format("A catetgoria %s informada não existe", id));
         }
     }
 

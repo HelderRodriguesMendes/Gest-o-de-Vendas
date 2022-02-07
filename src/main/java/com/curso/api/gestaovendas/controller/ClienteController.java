@@ -63,10 +63,17 @@ public class ClienteController {
         return new ResponseEntity<>(clienteService.save(convert.toCliente(clienteRequestDTO)), HttpStatus.CREATED);
     }
 
-    @ApiOperation(value = "Alterar cliente", nickname = "salvarCliente")
+    @ApiOperation(value = "Alterar cliente", nickname = "atualizarCliente")
     @PutMapping("/{id}")
     public ResponseEntity<ClienteResponseDTO>atualizar(@PathVariable Long id, @RequestBody ClienteRequestDTO clienteRequestDTO){
         clienteRequestDTO.setId(id);
         return new ResponseEntity<>(clienteService.atualizar(convert.toCliente(clienteRequestDTO)), HttpStatus.CREATED);
+    }
+
+    @ApiOperation(value = "Deletar um cliente", nickname = "deletarCliente")
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletar(@PathVariable Long id){
+        clienteService.deletar(id);
     }
 }

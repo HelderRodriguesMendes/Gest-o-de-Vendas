@@ -40,7 +40,7 @@ public class ProdutoService {
         }else return listOptional.get().stream().map(produto -> convert.toProdutoResponseDTO(produto)).collect(Collectors.toList());
     }
 
-    public ProdutoResponseDTO getIdProduto(Long id){
+    public ProdutoResponseDTO getById(Long id){
         Optional<Produto> produtoOptional = produtoRepository.findById(id);
         if(produtoOptional.isEmpty()){
             throw new EmptyResultDataAccessException(1);
@@ -58,14 +58,18 @@ public class ProdutoService {
     }
 
     public ProdutoResponseDTO atualizar(Produto produto){
-        validateProdutoExist(produto.getId());
+        if(getById(produto.getId()) == null){
+            throw new EmptyResultDataAccessException(1);
+        }
         validateCategoryExist(produto.getCategoria());
         return convert.toProdutoResponseDTO(produtoRepository.save(produto));
     }
 
-    public void deletar(Long idProduto){
-        validateProdutoExist(idProduto);
-        produtoRepository.deleteById(idProduto);
+    public void deletar(Long id){
+        if(getById(id) == null){
+            throw new EmptyResultDataAccessException(1);
+        }
+        produtoRepository.deleteById(id);
     }
 
     private void validaProdutoDuplicado(Produto produto){
@@ -78,14 +82,7 @@ public class ProdutoService {
     private void validateCategoryExist(Categoria categoria){
         if(categoria.getId() == null){
             throw new RegraNegocioException("Informe a categoria do produto");
-        }else if(categoriaService.getById(categoria.getId()) == null){
-            throw new RegraNegocioException(String.format("A catetgoria %s informada não existe", categoria.getId()));
         }
-    }
-
-    private void validateProdutoExist(Long idProdudo){
-        if(getIdProduto(idProdudo) == null){
-            throw new EmptyResultDataAccessException(1);
-        }
+        categoriaService.getById(categoria.getId());
     }
 }

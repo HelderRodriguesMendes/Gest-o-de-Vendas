@@ -25,7 +25,7 @@ public class CategoriaService {
     Convert convert = new Convert();
 
     public CategoriaResponseDTO salvar(Categoria categoria){
-        categoriaIsPresentName(categoria);
+        validarCategoriaDuplicada(categoria);
         return convert.toCategoriaResponseDTO(categoriaRepository.save(categoria));
     }
 
@@ -54,18 +54,20 @@ public class CategoriaService {
     public CategoriaResponseDTO atualizar(Categoria categoria){
         if(getById(categoria.getId())== null){
             throw new EmptyResultDataAccessException(1);
-        } else{
-            categoriaIsPresentName(categoria);
-            Categoria categoriaSalva = categoriaRepository.save(categoria);
-            return convert.toCategoriaResponseDTO(categoriaSalva);
         }
+        validarCategoriaDuplicada(categoria);
+        Categoria categoriaSalva = categoriaRepository.save(categoria);
+        return convert.toCategoriaResponseDTO(categoriaSalva);
     }
 
     public void deletar(Long id){
+        if(getById(id) == null){
+            throw new EmptyResultDataAccessException(1);
+        }
         categoriaRepository.deleteById(getById(id).getId());
     }
 
-    private void categoriaIsPresentName(Categoria categoria){
+    private void validarCategoriaDuplicada(Categoria categoria){
         Categoria categoriaIsPresent = categoriaRepository.findByNome(categoria.getNome());
         if(categoriaIsPresent != null && categoriaIsPresent.getId() != categoria.getId()){
             throw new RegraNegocioException(String.format("A categoria %s já esta cadastrada", categoria.getNome()));
