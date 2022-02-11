@@ -7,6 +7,7 @@ import com.curso.api.gestaovendas.responseDTO.ClienteReponseGetVendasDTO;
 import com.curso.api.gestaovendas.responseDTO.VendasGetAllResponseDTO;
 import com.curso.api.gestaovendas.util.Convert;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,8 +28,21 @@ public class VendaService {
 
 
     public Page<VendasGetAllResponseDTO> getAll(Pageable pageable){
-        List<VendasGetAllResponseDTO> vendasGetAllResponseDTOS = new ArrayList<>();
+
         Page<Venda> vendas = vendaRepository.findAll(pageable);
+        return new PageImpl<>(toPageVendasGetAllResponseDTO(vendas.getContent()));
+    }
+
+    public List<VendasGetAllResponseDTO> getVendasByCliente(String nome){
+        Optional<List<Venda>> vendas = vendaRepository.findByCliente_NomeOrderByData(nome);
+        if(vendas.isEmpty()){
+            throw new EmptyResultDataAccessException(1);
+        }
+        return toPageVendasGetAllResponseDTO(vendas.get());
+    }
+
+    private List<VendasGetAllResponseDTO> toPageVendasGetAllResponseDTO(List<Venda> vendas){
+        List<VendasGetAllResponseDTO> vendasGetAllResponseDTOS = new ArrayList<>();
         vendas.forEach(venda -> {
             ClienteReponseGetVendasDTO clienteReponseGetVendasDTO = convert.toClienteReponseGetVendasDTO(venda.getCliente());
             VendasGetAllResponseDTO vendasGetAllResponseDTO = new VendasGetAllResponseDTO();
@@ -36,6 +51,6 @@ public class VendaService {
             vendasGetAllResponseDTO.setCliente(clienteReponseGetVendasDTO);
             vendasGetAllResponseDTOS.add(vendasGetAllResponseDTO);
         });
-        return new PageImpl<>(vendasGetAllResponseDTOS);
+        return vendasGetAllResponseDTOS;
     }
 }
