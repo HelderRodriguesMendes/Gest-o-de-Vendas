@@ -1,5 +1,6 @@
 package com.curso.api.gestaovendas.service;
 
+import com.curso.api.gestaovendas.exception.RegraNegocioException;
 import com.curso.api.gestaovendas.model.Cliente;
 import com.curso.api.gestaovendas.model.Venda;
 import com.curso.api.gestaovendas.repository.VendaRepository;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -52,5 +54,16 @@ public class VendaService {
             vendasGetAllResponseDTOS.add(vendasGetAllResponseDTO);
         });
         return vendasGetAllResponseDTOS;
+    }
+
+    public List<VendasGetAllResponseDTO> getVendasByData(LocalDate data){
+        if(data == null){
+            throw new RegraNegocioException("Informe a data");
+        }
+        Optional<List<Venda>> optionalVendas = vendaRepository.findByData(data);
+        if(optionalVendas.isEmpty()){
+            throw new EmptyResultDataAccessException(1);
+        }
+        return toPageVendasGetAllResponseDTO(optionalVendas.get());
     }
 }

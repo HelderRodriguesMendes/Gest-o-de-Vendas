@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Api(tags = "Venda")
@@ -38,5 +39,11 @@ public class VendaController {
     @GetMapping("/getVendasByCliente")
     public ResponseEntity<List<VendasGetAllResponseDTO>>getVendasByCliente(@RequestParam String nome){
         return new ResponseEntity<>(vendaService.getVendasByCliente(nome), HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "Listar todas as Vendas por data", nickname = "listarVendasData")
+    @GetMapping("/getVendasByData")
+    public ResponseEntity<List<VendasGetAllResponseDTO>>getVendasByData(@RequestParam String data){
+        return new ResponseEntity<>(vendaService.getVendasByData(LocalDate.parse(data)), HttpStatus.OK);
     }
 }
