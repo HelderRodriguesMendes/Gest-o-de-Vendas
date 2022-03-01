@@ -4,6 +4,7 @@ import com.curso.api.gestaovendas.responseDTO.ClienteResponseDTO;
 import com.curso.api.gestaovendas.exception.RegraNegocioException;
 import com.curso.api.gestaovendas.model.Cliente;
 import com.curso.api.gestaovendas.repository.ClienteRepository;
+import com.curso.api.gestaovendas.responseDTO.ClienteVendaResponseDTO;
 import com.curso.api.gestaovendas.util.Convert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -22,6 +23,9 @@ public class ClienteService {
     @Autowired
     private ClienteRepository clienteRepository;
 
+    @Autowired
+    private VendaService vendaService;
+
     Convert convert = new Convert();
 
     public Page<ClienteResponseDTO> getAll(Pageable pageable){
@@ -29,12 +33,16 @@ public class ClienteService {
         return new PageImpl<>(clienteResponseDTOS);
     }
 
-    public ClienteResponseDTO getById(Long id){
+    public ClienteVendaResponseDTO getById(Long id){
         Optional<Cliente> clienteOptional = clienteRepository.findById(id);
         if(clienteOptional.isEmpty()){
             throw new EmptyResultDataAccessException(1);
         }
-        return convert.toClienteResponseDTO(clienteOptional.get());
+        ClienteVendaResponseDTO clienteVendaResponseDTO = new ClienteVendaResponseDTO();
+        clienteVendaResponseDTO.setId(clienteOptional.get().getId());
+        clienteVendaResponseDTO.setNomeCliente(clienteOptional.get().getNome());
+        clienteVendaResponseDTO.setVendas(vendaService.getVendaByIdCliente(clienteOptional.get().getId()));
+        return clienteVendaResponseDTO;
     }
 
     public List<ClienteResponseDTO> getByNome(String nome){

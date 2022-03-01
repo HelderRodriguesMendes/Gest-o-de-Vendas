@@ -1,5 +1,6 @@
 package com.curso.api.gestaovendas.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -21,10 +22,11 @@ public class ItemVenda implements Serializable {
     @Column(name = "preco_vendido")
     private Double precoVendido;
 
-    @ManyToOne
+    @ManyToOne(cascade={CascadeType.ALL, CascadeType.PERSIST})
     @JoinColumn(name = "id_produto", referencedColumnName = "id")
     private Produto produto;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "id_venda", referencedColumnName = "id")
     private Venda venda;

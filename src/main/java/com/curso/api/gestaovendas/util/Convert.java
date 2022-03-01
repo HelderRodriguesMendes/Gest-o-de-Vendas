@@ -48,8 +48,4 @@ public class Convert {
     public Produto toProduto(ProdutoRequestDTO produtoRequestDTO){
         return modelMapper.map(produtoRequestDTO, Produto.class);
     }
-
-    public VendasGetAllResponseDTO toVendasGetAllResponseDTO(Venda venda){
-        return modelMapper.map(venda, VendasGetAllResponseDTO.class);
-    }
 }

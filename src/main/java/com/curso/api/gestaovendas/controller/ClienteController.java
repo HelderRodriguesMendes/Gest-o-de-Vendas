@@ -2,7 +2,7 @@ package com.curso.api.gestaovendas.controller;
 
 import com.curso.api.gestaovendas.requestDTO.ClienteRequestDTO;
 import com.curso.api.gestaovendas.responseDTO.ClienteResponseDTO;
-import com.curso.api.gestaovendas.model.Cliente;
+import com.curso.api.gestaovendas.responseDTO.ClienteVendaResponseDTO;
 import com.curso.api.gestaovendas.service.ClienteService;
 import com.curso.api.gestaovendas.util.Convert;
 import io.swagger.annotations.Api;
@@ -37,8 +37,8 @@ public class ClienteController {
 
     @ApiOperation(value = "Bucar cliente por ID", nickname = "bucarClienteId")
     @GetMapping("/{id}")
-    public ResponseEntity<ClienteResponseDTO> getById(@PathVariable Long id){
-        return new ResponseEntity<ClienteResponseDTO>(clienteService.getById(id), HttpStatus.OK);
+    public ResponseEntity<ClienteVendaResponseDTO> getById(@PathVariable Long id){
+        return new ResponseEntity<>(clienteService.getById(id), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Bucar cliente por nome", nickname = "bucarClienteNome")

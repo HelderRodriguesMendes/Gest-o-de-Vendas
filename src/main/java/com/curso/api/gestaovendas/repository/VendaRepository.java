@@ -11,6 +11,7 @@ import java.util.Optional;
 @Repository
 public interface VendaRepository extends JpaRepository<Venda, Long> {
     Optional<List<Venda>> findByCliente_NomeOrderByData(String nome);
+    Optional<List<Venda>> findByCliente_IdOrderByData(Long id);
 
     Optional<List<Venda>> findByData(LocalDate data);
 }

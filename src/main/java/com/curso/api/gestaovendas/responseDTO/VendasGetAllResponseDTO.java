@@ -1,4 +1,4 @@
-package com.curso.api.gestaovendas.responseDTO;
+/*package com.curso.api.gestaovendas.responseDTO;
 
 import lombok.Data;
 
@@ -10,4 +10,4 @@ public class VendasGetAllResponseDTO {
     private Long id;
     private LocalDate data;
     private ClienteReponseGetVendasDTO cliente;
-}
+} */
