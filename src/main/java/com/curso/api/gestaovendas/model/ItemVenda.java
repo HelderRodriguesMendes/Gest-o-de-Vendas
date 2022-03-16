@@ -22,7 +22,7 @@ public class ItemVenda implements Serializable {
     @Column(name = "preco_vendido")
     private Double precoVendido;
 
-    @ManyToOne(cascade={CascadeType.ALL, CascadeType.PERSIST})
+    @ManyToOne(cascade={CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "id_produto", referencedColumnName = "id")
     private Produto produto;
 

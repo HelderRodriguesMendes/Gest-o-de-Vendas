@@ -24,40 +24,38 @@ public class CategoriaService {
 
     Convert convert = new Convert();
 
-    public CategoriaResponseDTO salvar(Categoria categoria){
+    public Categoria salvar(Categoria categoria){
         validarCategoriaDuplicada(categoria);
-        return convert.toCategoriaResponseDTO(categoriaRepository.save(categoria));
+        return categoriaRepository.save(categoria);
     }
 
-    public Page<CategoriaResponseDTO> getAll(Pageable pageable){
-        List<CategoriaResponseDTO> categoriaResponseDTOS = categoriaRepository.findAll(pageable).stream().map(categoria -> convert.toCategoriaResponseDTO(categoria)).collect(Collectors.toList());
-        return new PageImpl<>(categoriaResponseDTOS);
+    public List<Categoria> getAll(Pageable pageable){
+        return categoriaRepository.findAll(pageable).getContent();
     }
 
-    public CategoriaResponseDTO getById(Long id){
+    public Categoria getById(Long id){
         Optional<Categoria> categoriaOptional = categoriaRepository.findById(id);
         if(categoriaOptional.isEmpty()){
             throw new EmptyResultDataAccessException(1);
         }
-        return convert.toCategoriaResponseDTO(categoriaOptional.get());
+        return categoriaOptional.get();
     }
 
-    public List<CategoriaResponseDTO> findByNome(String nome){
+    public List<Categoria> findByNome(String nome){
         Optional<List<Categoria>> optionalCategorias = categoriaRepository.getByNome(nome);
         if(optionalCategorias.isEmpty()){
             throw new EmptyResultDataAccessException(1);
         }else{
-            return optionalCategorias.stream().map(categoria -> convert.toCategoriaResponseDTO((Categoria) categoria)).collect(Collectors.toList());
+            return optionalCategorias.get();
         }
     }
 
-    public CategoriaResponseDTO atualizar(Categoria categoria){
+    public Categoria atualizar(Categoria categoria){
         if(getById(categoria.getId())== null){
             throw new EmptyResultDataAccessException(1);
         }
         validarCategoriaDuplicada(categoria);
-        Categoria categoriaSalva = categoriaRepository.save(categoria);
-        return convert.toCategoriaResponseDTO(categoriaSalva);
+        return categoriaRepository.save(categoria);
     }
 
     public void deletar(Long id){

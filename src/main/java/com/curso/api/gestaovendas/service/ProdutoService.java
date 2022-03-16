@@ -1,6 +1,5 @@
 package com.curso.api.gestaovendas.service;
 
-import com.curso.api.gestaovendas.responseDTO.ProdutoResponseDTO;
 import com.curso.api.gestaovendas.exception.RegraNegocioException;
 import com.curso.api.gestaovendas.model.Categoria;
 import com.curso.api.gestaovendas.model.Produto;
@@ -9,13 +8,11 @@ import com.curso.api.gestaovendas.util.Convert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class ProdutoService {
@@ -28,41 +25,41 @@ public class ProdutoService {
 
     Convert convert = new Convert();
 
-    public Page<ProdutoResponseDTO> getAllProdutos(Pageable pageable){
-        List<ProdutoResponseDTO> produtoResponseDTOS = produtoRepository.findAll(pageable).stream().map(produto -> convert.toProdutoResponseDTO(produto)).collect(Collectors.toList());
-        return new PageImpl<>(produtoResponseDTOS);
+    public List<Produto> getAllProdutos(Pageable pageable){
+        Page<Produto> produtoPage = produtoRepository.findAll(pageable);
+        return produtoPage.getContent();
     }
 
-    public List<ProdutoResponseDTO> getByNome(String nome){
+    public List<Produto> getByNome(String nome){
         Optional<List<Produto>> listOptional = produtoRepository.getByNome(nome);
         if(listOptional.isEmpty()){
             throw new EmptyResultDataAccessException(1);
-        }else return listOptional.get().stream().map(produto -> convert.toProdutoResponseDTO(produto)).collect(Collectors.toList());
+        }else return listOptional.get();
     }
 
-    public ProdutoResponseDTO getById(Long id){
+    public Produto getById(Long id){
         Optional<Produto> produtoOptional = produtoRepository.findById(id);
         if(produtoOptional.isEmpty()){
             throw new EmptyResultDataAccessException(1);
         }
-        return convert.toProdutoResponseDTO(produtoOptional.get());
+        return produtoOptional.get();
     }
 
-    public ProdutoResponseDTO salvar(Produto produto){
+    public Produto salvar(Produto produto){
         validateCategoryExist(produto.getCategoria());
         validaProdutoDuplicado(produto);
         Produto produtoSave = produtoRepository.save(produto);
-        Categoria categoria = convert.toCategoria(categoriaService.getById(produtoSave.getCategoria().getId()));
+        Categoria categoria = categoriaService.getById(produtoSave.getCategoria().getId());
         produtoSave.setCategoria(categoria);
-        return convert.toProdutoResponseDTO(produtoSave);
+        return produtoSave;
     }
 
-    public ProdutoResponseDTO atualizar(Produto produto){
+    public Produto atualizar(Produto produto){
         if(getById(produto.getId()) == null){
             throw new EmptyResultDataAccessException(1);
         }
         validateCategoryExist(produto.getCategoria());
-        return convert.toProdutoResponseDTO(produtoRepository.save(produto));
+        return produtoRepository.save(produto);
     }
 
     public void deletar(Long id){
