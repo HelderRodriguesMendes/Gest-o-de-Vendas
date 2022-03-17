@@ -1,6 +1,7 @@
 package com.curso.api.gestaovendas.service;
 
 import com.curso.api.gestaovendas.exception.RegraNegocioException;
+import com.curso.api.gestaovendas.model.Categoria;
 import com.curso.api.gestaovendas.model.ItemVenda;
 import com.curso.api.gestaovendas.model.Produto;
 import com.curso.api.gestaovendas.model.Venda;
@@ -29,7 +30,7 @@ public class ItemVendaService {
     public List<ItemVenda> salvar(Venda vendaSalva, List<ItemVendaRequestDTO> itemVendaRequestDTOS){
         List<ItemVenda> itemVendasSalvas = new ArrayList<>();
         itemVendaRequestDTOS.forEach(itemVendaRequestDTO -> {
-            Produto produto = produtoService.getById(itemVendaRequestDTO.getIdProduto());
+            Produto produto = this.validateProdutoExist(itemVendaRequestDTO.getIdProduto());
             produto.setQuantidade(produto.getQuantidade() - itemVendaRequestDTO.getQuantidade());
             ItemVenda itemVenda = new ItemVenda();
             itemVenda.setQuantidade(itemVendaRequestDTO.getQuantidade());
@@ -52,10 +53,17 @@ public class ItemVendaService {
 
     public void validarItemVenda(List<ItemVendaRequestDTO> itemVendaRequestDTOS){
         itemVendaRequestDTOS.forEach(itemVendaRequestDTO -> {
-            Produto produto = produtoService.getById(itemVendaRequestDTO.getIdProduto());
+            Produto produto = this.validateProdutoExist(itemVendaRequestDTO.getIdProduto());
             if(produto.getQuantidade() < itemVendaRequestDTO.getQuantidade()){
                 throw new RegraNegocioException("Há apenas " + produto.getQuantidade() + " unidades disponiveis do produto " + produto.getDescricao());
             }
         });
+    }
+
+    private Produto validateProdutoExist(Long idProduto){
+        if(idProduto == null){
+            throw new RegraNegocioException("Informe o produto");
+        }
+        return produtoService.getById(idProduto);
     }
 }

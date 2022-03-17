@@ -25,6 +25,7 @@ public class GvExceptionHandler extends ResponseEntityExceptionHandler {
     private static final String CONSTANT_VALIDATION_NOT_BLANK = "NotBlank";
     private static final String CONSTANT_VALIDATION_NOT_NULL = "NotNull";
     private static final String CONSTANT_VALIDATION_LENGTH = "Length";
+    private static final String CONSTANT_VALIDATION_MIN = "Min";
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
@@ -78,6 +79,11 @@ public class GvExceptionHandler extends ResponseEntityExceptionHandler {
         if(fieldError.getCode().equals(CONSTANT_VALIDATION_LENGTH)){
             return fieldError.getDefaultMessage().concat(String.format(" deve ter entre %s e %s caracteres",
                     fieldError.getArguments()[2], fieldError.getArguments()[1]));
+        }
+
+        if(fieldError.getCode().equals(CONSTANT_VALIDATION_MIN)){
+            return fieldError.getDefaultMessage().concat(String.format(" deve ser maior que %s",
+                    fieldError.getArguments()[1]));
         }
         return fieldError.getField();
     }

@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class VendaController {
     List<Venda> vendas = new ArrayList<>();
 
     @PostMapping("/cliente/{idCliente}")
-    public ResponseEntity<VendaRespondeDTO> salvar( @PathVariable Long idCliente, @RequestBody VendaRequestDTO vendaRequestDTO){
+    public ResponseEntity<VendaRespondeDTO> salvar( @PathVariable Long idCliente, @Valid @RequestBody VendaRequestDTO vendaRequestDTO){
         return new ResponseEntity<>(vendaService.salvarVendaRequestDTO(idCliente, vendaRequestDTO), HttpStatus.CREATED);
     }
 
