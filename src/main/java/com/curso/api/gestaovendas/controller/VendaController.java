@@ -1,9 +1,11 @@
 package com.curso.api.gestaovendas.controller;
 
+import com.curso.api.gestaovendas.model.Cliente;
 import com.curso.api.gestaovendas.model.Venda;
 import com.curso.api.gestaovendas.requestDTO.VendaRequestDTO;
 import com.curso.api.gestaovendas.responseDTO.ClienteVendaResponseDTO;
-import com.curso.api.gestaovendas.responseDTO.VendaRespondeDTO;
+import com.curso.api.gestaovendas.responseDTO.VendaResponseDTO;
+import com.curso.api.gestaovendas.service.ItemVendaService;
 import com.curso.api.gestaovendas.service.VendaService;
 import com.curso.api.gestaovendas.util.Convert;
 import io.swagger.annotations.Api;
@@ -24,29 +26,36 @@ public class VendaController {
     @Autowired
     private VendaService vendaService;
 
+    @Autowired
+    private ItemVendaService itemVendaService;
+
     Convert convert = new Convert();
     List<Venda> vendas = new ArrayList<>();
 
     @PostMapping("/cliente/{idCliente}")
-    public ResponseEntity<VendaRespondeDTO> salvar( @PathVariable Long idCliente, @Valid @RequestBody VendaRequestDTO vendaRequestDTO){
-        return new ResponseEntity<>(vendaService.salvarVendaRequestDTO(idCliente, vendaRequestDTO), HttpStatus.CREATED);
+    public ResponseEntity<VendaResponseDTO> salvar(@PathVariable Long idCliente, @Valid @RequestBody VendaRequestDTO vendaRequestDTO){
+        //falta testa
+        Venda vendaSalva = vendaService.salvarVendaRequestDTO(idCliente, vendaRequestDTO);
+        return new ResponseEntity<>(convert.toVendaResponseDTO(vendaSalva, vendaRequestDTO.getItemVendaRequestDTOS(), itemVendaService), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/vendaByIdCliente/{id}")
+    public ResponseEntity<ClienteVendaResponseDTO> getVendaByIdCliente(@PathVariable Long id){
+        List<Venda> vendas = vendaService.findVendaByIdCliente(id);
+        Cliente cliente = vendas.get(1).getCliente();
+        return new ResponseEntity<>(new ClienteVendaResponseDTO(cliente.getId(), cliente.getNome(),
+            convert.toListVendaResponseDTO(vendas, itemVendaService)), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<List<ClienteVendaResponseDTO>> getVendaByIdCliente(@PathVariable Long id){
-        vendas = vendaService.getVendaByIdCliente(id);
-        return new ResponseEntity<>(convert.toListClienteVendaResponseDTO(vendas), HttpStatus.OK);
-    }
-
-    @GetMapping("/getVendaByNomeCliente")
-    public ResponseEntity<List<ClienteVendaResponseDTO>> getVendaByNomeCliente(@RequestParam String nome){
-        vendas = vendaService.getVendaByNomeCliente(nome);
-        return new ResponseEntity<>( convert.getListClienteVendaResponseDTO(vendas), HttpStatus.OK);
+    public ResponseEntity<VendaResponseDTO> getVendaById(@PathVariable Long id){
+        Venda venda = vendaService.getVendaById(id);
+        return new ResponseEntity<>(convert.toVendaResponseDTO(venda, itemVendaService), HttpStatus.OK);
     }
 
     @GetMapping("/getVendaByData")
-    public ResponseEntity<List<VendaRespondeDTO>> getVendaByData(@RequestParam String data){
+    public ResponseEntity<List<VendaResponseDTO>> getVendaByData(@RequestParam String data){
         vendas = vendaService.getVendaByData(data);
-        return new ResponseEntity<>(convert.getVendaRespondeDTO(vendas), HttpStatus.OK);
+        return new ResponseEntity<>(convert.toListVendaResponseDTO(vendas, itemVendaService), HttpStatus.OK);
     }
 }

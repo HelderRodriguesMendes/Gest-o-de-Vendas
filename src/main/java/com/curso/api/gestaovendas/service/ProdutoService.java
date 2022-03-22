@@ -23,8 +23,6 @@ public class ProdutoService {
     @Autowired
     CategoriaService categoriaService;
 
-    Convert convert = new Convert();
-
     public List<Produto> getAllProdutos(Pageable pageable){
         Page<Produto> produtoPage = produtoRepository.findAll(pageable);
         return produtoPage.getContent();

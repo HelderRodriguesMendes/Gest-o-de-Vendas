@@ -1,7 +1,6 @@
 package com.curso.api.gestaovendas.service;
 
 import com.curso.api.gestaovendas.exception.RegraNegocioException;
-import com.curso.api.gestaovendas.model.Categoria;
 import com.curso.api.gestaovendas.model.ItemVenda;
 import com.curso.api.gestaovendas.model.Produto;
 import com.curso.api.gestaovendas.model.Venda;
@@ -28,16 +27,14 @@ public class ItemVendaService {
     Convert convert = new Convert();
 
     public List<ItemVenda> salvar(Venda vendaSalva, List<ItemVendaRequestDTO> itemVendaRequestDTOS){
+        this.validarItemVenda(itemVendaRequestDTOS);
         List<ItemVenda> itemVendasSalvas = new ArrayList<>();
         itemVendaRequestDTOS.forEach(itemVendaRequestDTO -> {
+
             Produto produto = this.validateProdutoExist(itemVendaRequestDTO.getIdProduto());
             produto.setQuantidade(produto.getQuantidade() - itemVendaRequestDTO.getQuantidade());
-            ItemVenda itemVenda = new ItemVenda();
-            itemVenda.setQuantidade(itemVendaRequestDTO.getQuantidade());
-            itemVenda.setPrecoVendido(itemVendaRequestDTO.getPrecoVendido());
-            itemVenda.setProduto(produto);
-            itemVenda.setVenda(vendaSalva);
-            itemVendaRepository.save(itemVenda);
+
+            ItemVenda itemVenda = new ItemVenda(itemVendaRequestDTO.getQuantidade(), itemVendaRequestDTO.getPrecoVendido(), produto, vendaSalva);
             itemVendasSalvas.add(itemVendaRepository.save(itemVenda));
         });
         return itemVendasSalvas;
@@ -51,7 +48,7 @@ public class ItemVendaService {
         return optionalItemVendas.get();
     }
 
-    public void validarItemVenda(List<ItemVendaRequestDTO> itemVendaRequestDTOS){
+    private void validarItemVenda(List<ItemVendaRequestDTO> itemVendaRequestDTOS){
         itemVendaRequestDTOS.forEach(itemVendaRequestDTO -> {
             Produto produto = this.validateProdutoExist(itemVendaRequestDTO.getIdProduto());
             if(produto.getQuantidade() < itemVendaRequestDTO.getQuantidade()){
