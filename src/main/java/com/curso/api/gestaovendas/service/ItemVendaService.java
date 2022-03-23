@@ -27,7 +27,6 @@ public class ItemVendaService {
     Convert convert = new Convert();
 
     public List<ItemVenda> salvar(Venda vendaSalva, List<ItemVendaRequestDTO> itemVendaRequestDTOS){
-        this.validarItemVenda(itemVendaRequestDTOS);
         List<ItemVenda> itemVendasSalvas = new ArrayList<>();
         itemVendaRequestDTOS.forEach(itemVendaRequestDTO -> {
 
@@ -48,7 +47,7 @@ public class ItemVendaService {
         return optionalItemVendas.get();
     }
 
-    private void validarItemVenda(List<ItemVendaRequestDTO> itemVendaRequestDTOS){
+    public void validarItemVenda(List<ItemVendaRequestDTO> itemVendaRequestDTOS){
         itemVendaRequestDTOS.forEach(itemVendaRequestDTO -> {
             Produto produto = this.validateProdutoExist(itemVendaRequestDTO.getIdProduto());
             if(produto.getQuantidade() < itemVendaRequestDTO.getQuantidade()){

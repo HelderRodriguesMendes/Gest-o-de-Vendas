@@ -25,6 +25,7 @@ public class VendaService {
     private ClienteService clienteService;
 
     public Venda salvarVendaRequestDTO(Long idCliente, VendaRequestDTO vendaRequestDTO){
+        itemVendaService.validarItemVenda(vendaRequestDTO.getItemVendaRequestDTOS());
         Cliente cliente = clienteService.getById(idCliente);
          return vendaRepository.save(new Venda(vendaRequestDTO.getData(), cliente));
     }
