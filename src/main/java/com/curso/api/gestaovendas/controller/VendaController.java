@@ -39,6 +39,12 @@ public class VendaController {
         return new ResponseEntity<>(convert.toVendaResponseDTO(vendaSalva, vendaRequestDTO.getItemVendaRequestDTOS(), itemVendaService), HttpStatus.CREATED);
     }
 
+    @GetMapping("/getAll")
+    public ResponseEntity<List<VendaResponseDTO>> getAllVendas(){
+        List<Venda> vendas = vendaService.getAllVendas();
+        return new ResponseEntity<>(convert.toListVendaResponseDTO(vendas, itemVendaService), HttpStatus.OK);
+    }
+
     @GetMapping("/vendaByIdCliente/{id}")
     public ResponseEntity<ClienteVendaResponseDTO> getVendaByIdCliente(@PathVariable Long id){
         List<Venda> vendas = vendaService.findVendaByIdCliente(id);
@@ -57,5 +63,11 @@ public class VendaController {
     public ResponseEntity<List<VendaResponseDTO>> getVendaByData(@RequestParam String data){
         vendas = vendaService.getVendaByData(data);
         return new ResponseEntity<>(convert.toListVendaResponseDTO(vendas, itemVendaService), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletar(@PathVariable Long id){
+        vendaService.deletar(id);
     }
 }

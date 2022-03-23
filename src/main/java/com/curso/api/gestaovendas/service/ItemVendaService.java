@@ -47,6 +47,10 @@ public class ItemVendaService {
         return optionalItemVendas.get();
     }
 
+    public void deletar(Long id){
+        itemVendaRepository.deleteById(id);
+    }
+
     public void validarItemVenda(List<ItemVendaRequestDTO> itemVendaRequestDTOS){
         itemVendaRequestDTOS.forEach(itemVendaRequestDTO -> {
             Produto produto = this.validateProdutoExist(itemVendaRequestDTO.getIdProduto());

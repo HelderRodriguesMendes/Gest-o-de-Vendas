@@ -1,6 +1,7 @@
 package com.curso.api.gestaovendas.service;
 
 import com.curso.api.gestaovendas.model.Cliente;
+import com.curso.api.gestaovendas.model.ItemVenda;
 import com.curso.api.gestaovendas.model.Venda;
 import com.curso.api.gestaovendas.repository.VendaRepository;
 import com.curso.api.gestaovendas.requestDTO.VendaRequestDTO;
@@ -30,6 +31,10 @@ public class VendaService {
          return vendaRepository.save(new Venda(vendaRequestDTO.getData(), cliente));
     }
 
+    public List<Venda> getAllVendas(){
+        return vendaRepository.findAll();
+    }
+
     public List<Venda> findVendaByIdCliente(Long idCliente){
         clienteService.getById(idCliente);
         Optional<List<Venda>> optionalVendas = vendaRepository.findByCliente_Id(idCliente);
@@ -53,6 +58,13 @@ public class VendaService {
             throw new EmptyResultDataAccessException(1);
         }
         return optionalVendas.get();
+    }
+
+    public void deletar(Long idVenda){
+        getVendaById(idVenda);
+        List<ItemVenda> itemVendas = itemVendaService.getItemVendaByIdVenda(idVenda);
+        itemVendas.stream().forEach(itemVenda -> itemVendaService.deletar(itemVenda.getId()));
+        vendaRepository.deleteById(idVenda);
     }
 
 }
