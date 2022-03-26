@@ -1,6 +1,7 @@
 package com.curso.api.gestaovendas.service;
 
 import com.curso.api.gestaovendas.exception.RegraNegocioException;
+import com.curso.api.gestaovendas.exception.entidadesEnum.EntidadesMsgException;
 import com.curso.api.gestaovendas.model.Categoria;
 import com.curso.api.gestaovendas.model.Produto;
 import com.curso.api.gestaovendas.repository.ProdutoRepository;
@@ -31,14 +32,14 @@ public class ProdutoService {
     public List<Produto> getByNome(String nome){
         Optional<List<Produto>> listOptional = produtoRepository.getByNome(nome);
         if(listOptional.isEmpty()){
-            throw new EmptyResultDataAccessException(1);
+            throw new EmptyResultDataAccessException(EntidadesMsgException.PRODUTO.getEntidade(), 1);
         }else return listOptional.get();
     }
 
     public Produto getById(Long id){
         Optional<Produto> produtoOptional = produtoRepository.findById(id);
         if(produtoOptional.isEmpty()){
-            throw new EmptyResultDataAccessException(1);
+            throw new EmptyResultDataAccessException(EntidadesMsgException.PRODUTO.getEntidade(), 1);
         }
         return produtoOptional.get();
     }
@@ -54,7 +55,7 @@ public class ProdutoService {
 
     public Produto atualizar(Produto produto){
         if(getById(produto.getId()) == null){
-            throw new EmptyResultDataAccessException(1);
+            throw new EmptyResultDataAccessException(EntidadesMsgException.PRODUTO.getEntidade(), 1);
         }
         validateCategoryExist(produto.getCategoria());
         return produtoRepository.save(produto);
@@ -62,7 +63,7 @@ public class ProdutoService {
 
     public void deletar(Long id){
         if(getById(id) == null){
-            throw new EmptyResultDataAccessException(1);
+            throw new EmptyResultDataAccessException(EntidadesMsgException.PRODUTO.getEntidade(), 1);
         }
         produtoRepository.deleteById(id);
     }

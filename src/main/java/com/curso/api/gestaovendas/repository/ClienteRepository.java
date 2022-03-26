@@ -11,9 +11,8 @@ import java.util.Optional;
 
 @Repository
 public interface ClienteRepository extends JpaRepository<Cliente, Long> {
-    @Transactional
-    @Query(value = "select * from cliente where nome like %?1% and ativo = 1 order by nome limit 100", nativeQuery = true)
-    public Optional<List<Cliente>> getByNome(String nome);
+
+    Optional<List<Cliente>> findByNomeLike(String nome);
 
     @Transactional
     @Query(value = "select * from cliente where estado = ?1 and ativo = 1 order by nome limit 100", nativeQuery = true)

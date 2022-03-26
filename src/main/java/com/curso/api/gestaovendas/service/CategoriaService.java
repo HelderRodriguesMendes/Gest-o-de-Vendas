@@ -1,5 +1,6 @@
 package com.curso.api.gestaovendas.service;
 
+import com.curso.api.gestaovendas.exception.entidadesEnum.EntidadesMsgException;
 import com.curso.api.gestaovendas.responseDTO.CategoriaResponseDTO;
 import com.curso.api.gestaovendas.exception.RegraNegocioException;
 import com.curso.api.gestaovendas.model.Categoria;
@@ -22,8 +23,6 @@ public class CategoriaService {
     @Autowired
     private CategoriaRepository categoriaRepository;
 
-    Convert convert = new Convert();
-
     public Categoria salvar(Categoria categoria){
         validarCategoriaDuplicada(categoria);
         return categoriaRepository.save(categoria);
@@ -36,7 +35,7 @@ public class CategoriaService {
     public Categoria getById(Long id){
         Optional<Categoria> categoriaOptional = categoriaRepository.findById(id);
         if(categoriaOptional.isEmpty()){
-            throw new EmptyResultDataAccessException(1);
+            throw new EmptyResultDataAccessException(EntidadesMsgException.CATEGORIA.getEntidade() + " " + id, 1);
         }
         return categoriaOptional.get();
     }
@@ -44,7 +43,7 @@ public class CategoriaService {
     public List<Categoria> findByNome(String nome){
         Optional<List<Categoria>> optionalCategorias = categoriaRepository.getByNome(nome);
         if(optionalCategorias.isEmpty()){
-            throw new EmptyResultDataAccessException(1);
+            throw new EmptyResultDataAccessException(EntidadesMsgException.CATEGORIA.getEntidade() + " " + nome, 1);
         }else{
             return optionalCategorias.get();
         }
@@ -52,7 +51,7 @@ public class CategoriaService {
 
     public Categoria atualizar(Categoria categoria){
         if(getById(categoria.getId())== null){
-            throw new EmptyResultDataAccessException(1);
+            throw new EmptyResultDataAccessException(EntidadesMsgException.CATEGORIA.getEntidade() + " " + categoria.getNome(),1);
         }
         validarCategoriaDuplicada(categoria);
         return categoriaRepository.save(categoria);
@@ -60,7 +59,7 @@ public class CategoriaService {
 
     public void deletar(Long id){
         if(getById(id) == null){
-            throw new EmptyResultDataAccessException(1);
+            throw new EmptyResultDataAccessException(EntidadesMsgException.CATEGORIA.getEntidade()  + " " + id,1);
         }
         categoriaRepository.deleteById(getById(id).getId());
     }

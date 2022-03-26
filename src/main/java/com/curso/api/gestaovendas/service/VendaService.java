@@ -1,5 +1,6 @@
 package com.curso.api.gestaovendas.service;
 
+import com.curso.api.gestaovendas.exception.entidadesEnum.EntidadesMsgException;
 import com.curso.api.gestaovendas.model.Cliente;
 import com.curso.api.gestaovendas.model.ItemVenda;
 import com.curso.api.gestaovendas.model.Venda;
@@ -39,7 +40,7 @@ public class VendaService {
         clienteService.getById(idCliente);
         Optional<List<Venda>> optionalVendas = vendaRepository.findByCliente_Id(idCliente);
         if(optionalVendas.isEmpty()){
-            throw new EmptyResultDataAccessException(1);
+            throw new EmptyResultDataAccessException(EntidadesMsgException.VENDA.getEntidade(), 1);
         }
         return optionalVendas.get();
     }
@@ -47,7 +48,7 @@ public class VendaService {
     public List<Venda> getVendaByData(String data){
         Optional<List<Venda>> optionalVendas = vendaRepository.findByData(LocalDate.parse(data));
         if(optionalVendas.isEmpty()){
-            throw new EmptyResultDataAccessException(1);
+            throw new EmptyResultDataAccessException(EntidadesMsgException.VENDA.getEntidade(), 1);
         }
         return optionalVendas.get();
     }
@@ -55,7 +56,7 @@ public class VendaService {
     public Venda getVendaById(Long id){
         Optional<Venda> optionalVendas = vendaRepository.findById(id);
         if(optionalVendas.isEmpty()){
-            throw new EmptyResultDataAccessException(1);
+            throw new EmptyResultDataAccessException(EntidadesMsgException.VENDA.getEntidade(), 1);
         }
         return optionalVendas.get();
     }

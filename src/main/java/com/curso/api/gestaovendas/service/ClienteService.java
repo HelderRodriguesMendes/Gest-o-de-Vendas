@@ -1,6 +1,7 @@
 package com.curso.api.gestaovendas.service;
 
 import com.curso.api.gestaovendas.exception.RegraNegocioException;
+import com.curso.api.gestaovendas.exception.entidadesEnum.EntidadesMsgException;
 import com.curso.api.gestaovendas.model.Cliente;
 import com.curso.api.gestaovendas.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,26 +33,31 @@ public class ClienteService {
         }
         Optional<Cliente> clienteOptional = clienteRepository.findById(id);
         if(clienteOptional.isEmpty()){
-            throw new EmptyResultDataAccessException(1);
+            throw new EmptyResultDataAccessException(EntidadesMsgException.CLIENTE.getEntidade()  + " " + id, 1);
         }
         return clienteOptional.get();
     }
 
     public List<Cliente> getByNome(String nome){
-        return getListDTO(clienteRepository.getByNome(nome));
+        return getListDTO(clienteRepository.findByNomeLike("%"+nome+"%"), nome);
     }
 
     public List<Cliente> getByEstado(String estado){
-        return getListDTO(clienteRepository.getByEstado(estado));
+        return getListDTO(clienteRepository.getByEstado(estado), "");
     }
 
     public List<Cliente> getByCidade(String cidade){
-        return getListDTO(clienteRepository.getByCidade(cidade));
+        return getListDTO(clienteRepository.getByCidade(cidade), "");
     }
 
-    private List<Cliente> getListDTO(Optional<List<Cliente>> listOptional){
+    private List<Cliente> getListDTO(Optional<List<Cliente>> listOptional, String filtro){
         if (listOptional.get().isEmpty()){
-            throw new EmptyResultDataAccessException(1);
+            if(filtro.equals("")){
+                throw new EmptyResultDataAccessException(EntidadesMsgException.CLIENTE.getEntidade(), 1);
+            }else{
+                throw new EmptyResultDataAccessException(EntidadesMsgException.CLIENTE.getEntidade()  + " " + filtro, 1);
+            }
+
         }else return listOptional.get();
     }
 
@@ -62,14 +68,14 @@ public class ClienteService {
 
     public Cliente atualizar(Cliente cliente){
         if(getById(cliente.getId()) == null){
-            throw new EmptyResultDataAccessException(1);
+            throw new EmptyResultDataAccessException(EntidadesMsgException.CLIENTE.getEntidade(), 1);
         }
         return clienteRepository.save(cliente);
     }
 
     public void deletar(Long id){
         if(getById(id) == null){
-            throw new EmptyResultDataAccessException(1);
+            throw new EmptyResultDataAccessException(EntidadesMsgException.CLIENTE.getEntidade(), 1);
         }
         clienteRepository.deleteById(getById(id).getId());
     }

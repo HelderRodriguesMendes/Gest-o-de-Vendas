@@ -1,6 +1,7 @@
 package com.curso.api.gestaovendas.service;
 
 import com.curso.api.gestaovendas.exception.RegraNegocioException;
+import com.curso.api.gestaovendas.exception.entidadesEnum.EntidadesMsgException;
 import com.curso.api.gestaovendas.model.ItemVenda;
 import com.curso.api.gestaovendas.model.Produto;
 import com.curso.api.gestaovendas.model.Venda;
@@ -42,7 +43,7 @@ public class ItemVendaService {
     public List<ItemVenda> getItemVendaByIdVenda(Long idVenda){
         Optional<List<ItemVenda>> optionalItemVendas = itemVendaRepository.findByVenda_Id(idVenda);
         if(optionalItemVendas.isEmpty()){
-            throw new EmptyResultDataAccessException(1);
+            throw new EmptyResultDataAccessException(EntidadesMsgException.ITENVENDA.getEntidade(), 1);
         }
         return optionalItemVendas.get();
     }

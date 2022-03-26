@@ -45,7 +45,7 @@ public class GvExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(EmptyResultDataAccessException.class)
     public ResponseEntity<Object> handleEmptyResultDataAccessException(EmptyResultDataAccessException ex, WebRequest request){
-        String msgUser = "Recurso não encontrado";
+        String msgUser = ex.getMessage() + " não encontrado(a)";
         String msgDev = ex.toString();
         List<MessagesError> messagesErrors = Arrays.asList(new MessagesError(msgUser, msgDev));
         return handleExceptionInternal(ex, messagesErrors, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
