@@ -65,7 +65,7 @@ public class Convert {
         List<ItemVendaResponseDTO> itemVendaResponseDTOS = new ArrayList<>();
         vendas.forEach(itemVenda -> {
             ItemVendaResponseDTO itemVendaResponseDTO = new ItemVendaResponseDTO();
-            itemVendaResponseDTO.setId(itemVenda.getId());
+            itemVendaResponseDTO.setIdItemVenda(itemVenda.getId());
             itemVendaResponseDTO.setQuantidade(itemVenda.getQuantidade());
             itemVendaResponseDTO.setPrecoVendido(itemVenda.getPrecoVendido());
             itemVendaResponseDTO.setIdProduto(itemVenda.getProduto().getId());
@@ -100,5 +100,9 @@ public class Convert {
     public VendaResponseDTO toVendaResponseDTO(Venda venda, ItemVendaService itemVendaService){
         List<ItemVendaResponseDTO> itemVendaDTOS = toListItemVendaResponseDTO(itemVendaService.getItemVendaByIdVenda(venda.getId()));
         return new VendaResponseDTO(venda.getId(), venda.getData(), itemVendaDTOS);
+    }
+
+    public VendaResponseDTO toVendaResponseDTO(List<ItemVenda> itemVendas, Venda venda){
+        return new VendaResponseDTO(venda.getId(), venda.getData(), toListItemVendaResponseDTO(itemVendas));
     }
 }

@@ -26,7 +26,7 @@ public class VendaService {
     @Autowired
     private ClienteService clienteService;
 
-    public Venda salvarVendaRequestDTO(Long idCliente, VendaRequestDTO vendaRequestDTO){
+    public Venda salvar(Long idCliente, VendaRequestDTO vendaRequestDTO){
         itemVendaService.validarItemVenda(vendaRequestDTO.getItemVendaRequestDTOS());
         Cliente cliente = clienteService.getById(idCliente);
          return vendaRepository.save(new Venda(vendaRequestDTO.getData(), cliente));
@@ -59,6 +59,12 @@ public class VendaService {
             throw new EmptyResultDataAccessException(EntidadesMsgException.VENDA.getEntidade(), 1);
         }
         return optionalVendas.get();
+    }
+
+    public Venda atualizar(Long idVenda, Long idCliente, VendaRequestDTO vendaRequestDTO){
+        getVendaById(idVenda);
+        Cliente cliente = clienteService.getById(idCliente);
+        return vendaRepository.save(new Venda(idVenda, vendaRequestDTO.getData(), cliente));
     }
 
     public void deletar(Long idVenda){

@@ -7,7 +7,6 @@ import com.curso.api.gestaovendas.model.Produto;
 import com.curso.api.gestaovendas.model.Venda;
 import com.curso.api.gestaovendas.repository.ItemVendaRepository;
 import com.curso.api.gestaovendas.requestDTO.ItemVendaRequestDTO;
-import com.curso.api.gestaovendas.util.Convert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
@@ -25,7 +24,8 @@ public class ItemVendaService {
     @Autowired
     private ProdutoService produtoService;
 
-    Convert convert = new Convert();
+    @Autowired
+    private VendaService vendaService;
 
     public List<ItemVenda> salvar(Venda vendaSalva, List<ItemVendaRequestDTO> itemVendaRequestDTOS){
         List<ItemVenda> itemVendasSalvas = new ArrayList<>();
@@ -48,6 +48,39 @@ public class ItemVendaService {
         return optionalItemVendas.get();
     }
 
+
+    public List<ItemVenda> atualizar(List<ItemVendaRequestDTO> itemVendaRequestDTOS, Long idVenda){
+        List<ItemVenda> itemVendas = new ArrayList<>();
+        List<ItemVenda> itemVendasSalvo = getItemVendaByIdVenda(idVenda);
+
+        itemVendaRequestDTOS.forEach(itemVendaRequestDTO -> {
+            itemVendasSalvo.forEach(itemVendaSalvo -> {
+                Produto produto = produtoService.getById(itemVendaRequestDTO.getIdProduto());
+                int diferencaQuantidade = 0;
+
+                if(itemVendaRequestDTO.getQuantidade() > itemVendaSalvo.getQuantidade()){
+                    diferencaQuantidade = itemVendaRequestDTO.getQuantidade() - itemVendaSalvo.getQuantidade();
+                }else if(itemVendaRequestDTO.getQuantidade() < itemVendaSalvo.getQuantidade()){
+                    int reducao = itemVendaSalvo.getQuantidade() - itemVendaRequestDTO.getQuantidade();
+                    produto.setQuantidade(produto.getQuantidade() + reducao);
+                }
+
+                if(diferencaQuantidade > 0){
+                    verificarQtdItemVenda(produto, diferencaQuantidade);
+                    produto.setQuantidade(produto.getQuantidade() - diferencaQuantidade);
+                }
+
+                if(itemVendaRequestDTO.getIdProduto() == itemVendaSalvo.getProduto().getId()){
+                    produtoService.atualizar(produto);
+                    itemVendaSalvo.setQuantidade(itemVendaRequestDTO.getQuantidade());
+                    itemVendaSalvo.setPrecoVendido(itemVendaRequestDTO.getPrecoVendido());
+                    itemVendas.add(itemVendaRepository.save(itemVendaSalvo));
+                }
+            });
+        });
+        return itemVendas;
+    }
+
     public void deletar(Long id){
         itemVendaRepository.deleteById(id);
     }
@@ -55,10 +88,18 @@ public class ItemVendaService {
     public void validarItemVenda(List<ItemVendaRequestDTO> itemVendaRequestDTOS){
         itemVendaRequestDTOS.forEach(itemVendaRequestDTO -> {
             Produto produto = this.validateProdutoExist(itemVendaRequestDTO.getIdProduto());
-            if(produto.getQuantidade() < itemVendaRequestDTO.getQuantidade()){
-                throw new RegraNegocioException("Há apenas " + produto.getQuantidade() + " unidades disponiveis do produto " + produto.getDescricao());
-            }
+            verificarQtdItemVenda(produto, itemVendaRequestDTO.getQuantidade());
         });
+    }
+
+    private void verificarQtdItemVenda(Produto produto, int qtd){
+        if(produto.getQuantidade() < qtd){
+            this.msgValidacaoQtdItemVenda(produto);
+        }
+    }
+
+    private void msgValidacaoQtdItemVenda(Produto produto){
+        throw new RegraNegocioException("Há apenas " + produto.getQuantidade() + " unidades disponiveis do produto " + produto.getDescricao());
     }
 
     private Produto validateProdutoExist(Long idProduto){

@@ -1,5 +1,6 @@
 package com.curso.api.gestaovendas.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +12,7 @@ import java.time.LocalDate;
 @Table(name = "venda")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class Venda implements Serializable {
 
     @Id

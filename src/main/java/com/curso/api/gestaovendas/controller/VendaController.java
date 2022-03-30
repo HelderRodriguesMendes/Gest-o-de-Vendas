@@ -1,6 +1,7 @@
 package com.curso.api.gestaovendas.controller;
 
 import com.curso.api.gestaovendas.model.Cliente;
+import com.curso.api.gestaovendas.model.ItemVenda;
 import com.curso.api.gestaovendas.model.Venda;
 import com.curso.api.gestaovendas.requestDTO.VendaRequestDTO;
 import com.curso.api.gestaovendas.responseDTO.ClienteVendaResponseDTO;
@@ -34,8 +35,7 @@ public class VendaController {
 
     @PostMapping("/cliente/{idCliente}")
     public ResponseEntity<VendaResponseDTO> salvar(@PathVariable Long idCliente, @Valid @RequestBody VendaRequestDTO vendaRequestDTO){
-        //falta testa
-        Venda vendaSalva = vendaService.salvarVendaRequestDTO(idCliente, vendaRequestDTO);
+        Venda vendaSalva = vendaService.salvar(idCliente, vendaRequestDTO);
         return new ResponseEntity<>(convert.toVendaResponseDTO(vendaSalva, vendaRequestDTO.getItemVendaRequestDTOS(), itemVendaService), HttpStatus.CREATED);
     }
 
@@ -63,6 +63,13 @@ public class VendaController {
     public ResponseEntity<List<VendaResponseDTO>> getVendaByData(@RequestParam String data){
         vendas = vendaService.getVendaByData(data);
         return new ResponseEntity<>(convert.toListVendaResponseDTO(vendas, itemVendaService), HttpStatus.OK);
+    }
+
+    @PutMapping("/{idVenda}/cliente/{idCliente}")
+    public ResponseEntity<VendaResponseDTO> atualizar(@PathVariable Long idVenda, @PathVariable Long idCliente, @RequestBody VendaRequestDTO vendaRequestDTO){
+        List<ItemVenda> itemVendasAtualizadas = itemVendaService.atualizar(vendaRequestDTO.getItemVendaRequestDTOS(), idVenda);
+        Venda vendaAtualizada = vendaService.atualizar(idVenda, idCliente, vendaRequestDTO);
+        return new ResponseEntity<>(convert.toVendaResponseDTO(itemVendasAtualizadas, vendaAtualizada), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

@@ -5,7 +5,6 @@ import com.curso.api.gestaovendas.exception.entidadesEnum.EntidadesMsgException;
 import com.curso.api.gestaovendas.model.Categoria;
 import com.curso.api.gestaovendas.model.Produto;
 import com.curso.api.gestaovendas.repository.ProdutoRepository;
-import com.curso.api.gestaovendas.util.Convert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;

@@ -11,6 +11,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "item_venda")
 @Data
+@AllArgsConstructor
 @NoArgsConstructor
 public class ItemVenda implements Serializable {
 
