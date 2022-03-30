@@ -8,12 +8,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@ApiModel("Produto retorno DTO")
+@ApiModel("Dados de saida de um Produto")
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProdutoResponseDTO {
 
-    @ApiModelProperty(value = "Código")
+    @ApiModelProperty(value = "ID")
     private Long id;
 
     @ApiModelProperty(value = "Descrição")

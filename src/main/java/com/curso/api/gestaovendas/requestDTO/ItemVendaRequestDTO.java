@@ -1,5 +1,6 @@
 package com.curso.api.gestaovendas.requestDTO;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -8,6 +9,7 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Data
+@ApiModel("Dados de entrada dos Intens de uma Venda")
 public class ItemVendaRequestDTO implements Serializable {
 
     @ApiModelProperty(value = "Id produto")
@@ -20,6 +22,6 @@ public class ItemVendaRequestDTO implements Serializable {
     private Integer quantidade;
 
     @ApiModelProperty(value = "Preço vendido")
-    @NotNull(message = "Preço vendid")
+    @NotNull(message = "Preço vendido")
     private Double precoVendido;
 }

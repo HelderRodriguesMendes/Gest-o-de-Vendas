@@ -7,9 +7,7 @@ import com.curso.api.gestaovendas.requestDTO.ItemVendaRequestDTO;
 import com.curso.api.gestaovendas.requestDTO.ProdutoRequestDTO;
 import com.curso.api.gestaovendas.responseDTO.*;
 import com.curso.api.gestaovendas.service.ItemVendaService;
-import com.curso.api.gestaovendas.service.ProdutoService;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,15 +18,8 @@ public class Convert {
 
     private ModelMapper modelMapper = new ModelMapper();
 
-    @Autowired
-    private ProdutoService produtoService;
-
     public ClienteResponseDTO toClienteResponseDTO(Cliente cliente) {
         return modelMapper.map(cliente, ClienteResponseDTO.class);
-    }
-
-    public ClienteReponseGetVendasDTO toClienteReponseGetVendasDTO(Cliente cliente) {
-        return modelMapper.map(cliente, ClienteReponseGetVendasDTO.class);
     }
 
     public Cliente toCliente(ClienteRequestDTO clienteRequestDTO) {
@@ -43,10 +34,6 @@ public class Convert {
 
     public Categoria toCategoria(CategoriaRequestDTO categoriaRequestDTO) {
         return modelMapper.map(categoriaRequestDTO, Categoria.class);
-    }
-
-    public Categoria toCategoria(CategoriaResponseDTO categoriaResponseDTO) {
-        return modelMapper.map(categoriaResponseDTO, Categoria.class);
     }
 
     //###########################################################################

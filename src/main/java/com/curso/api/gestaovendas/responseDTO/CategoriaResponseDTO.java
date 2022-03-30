@@ -7,12 +7,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@ApiModel("Categoria retorno DTO")
+@ApiModel("Dados de saida de uma Categoria de Produtos")
 @AllArgsConstructor
 @NoArgsConstructor
 public class CategoriaResponseDTO {
 
-    @ApiModelProperty(value = "Código")
+    @ApiModelProperty(value = "ID")
     private Long id;
 
     @ApiModelProperty(value = "Nome")

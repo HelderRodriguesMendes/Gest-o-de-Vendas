@@ -9,12 +9,12 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 @Data
-@ApiModel("Cliente retorno DTO")
+@ApiModel("Dados de saida de um Cliente")
 @AllArgsConstructor
 @NoArgsConstructor
 public class ClienteResponseDTO implements Serializable {
 
-    @ApiModelProperty(value = "Código")
+    @ApiModelProperty(value = "ID")
     private Long id;
 
     @ApiModelProperty(value = "Nome")

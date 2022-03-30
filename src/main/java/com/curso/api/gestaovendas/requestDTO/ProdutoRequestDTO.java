@@ -1,6 +1,7 @@
 package com.curso.api.gestaovendas.requestDTO;
 
 import com.curso.api.gestaovendas.model.Categoria;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
@@ -11,6 +12,7 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Data
+@ApiModel("Dados de entrada de um Produto")
 public class ProdutoRequestDTO implements Serializable {
 
     @ApiModelProperty(value = "Código")
