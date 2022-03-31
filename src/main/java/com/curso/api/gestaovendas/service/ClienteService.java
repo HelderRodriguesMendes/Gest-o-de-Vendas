@@ -19,9 +19,6 @@ public class ClienteService {
     @Autowired
     private ClienteRepository clienteRepository;
 
-    @Autowired
-    private VendaService vendaService;
-
     public List<Cliente> getAll(Pageable pageable){
         Page<Cliente> clientes = clienteRepository.findAll(pageable);
         return clientes.getContent();

@@ -1,21 +1,16 @@
 package com.curso.api.gestaovendas.service;
 
-import com.curso.api.gestaovendas.exception.entidadesEnum.EntidadesMsgException;
-import com.curso.api.gestaovendas.responseDTO.CategoriaResponseDTO;
 import com.curso.api.gestaovendas.exception.RegraNegocioException;
+import com.curso.api.gestaovendas.exception.entidadesEnum.EntidadesMsgException;
 import com.curso.api.gestaovendas.model.Categoria;
 import com.curso.api.gestaovendas.repository.CategoriaRepository;
-import com.curso.api.gestaovendas.util.Convert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class CategoriaService {

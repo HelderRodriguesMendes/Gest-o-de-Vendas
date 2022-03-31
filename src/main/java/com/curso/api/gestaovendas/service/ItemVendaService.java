@@ -24,9 +24,6 @@ public class ItemVendaService {
     @Autowired
     private ProdutoService produtoService;
 
-    @Autowired
-    private VendaService vendaService;
-
     public List<ItemVenda> salvar(Venda vendaSalva, List<ItemVendaRequestDTO> itemVendaRequestDTOS){
         List<ItemVenda> itemVendasSalvas = new ArrayList<>();
         itemVendaRequestDTOS.forEach(itemVendaRequestDTO -> {
