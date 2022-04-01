@@ -18,10 +18,10 @@ import java.util.Optional;
 public class ProdutoService {
 
     @Autowired
-    ProdutoRepository produtoRepository;
+    private ProdutoRepository produtoRepository;
 
     @Autowired
-    CategoriaService categoriaService;
+    private CategoriaService categoriaService;
 
     public List<Produto> getAllProdutos(Pageable pageable){
         Page<Produto> produtoPage = produtoRepository.findAll(pageable);
@@ -30,7 +30,7 @@ public class ProdutoService {
 
     public List<Produto> getByNome(String nome){
         Optional<List<Produto>> listOptional = produtoRepository.getByNome(nome);
-        if(listOptional.isEmpty()){
+        if(listOptional.get().size() <= 0){
             throw new EmptyResultDataAccessException(EntidadesMsgException.PRODUTO.getEntidade(), 1);
         }else return listOptional.get();
     }
@@ -61,9 +61,6 @@ public class ProdutoService {
     }
 
     public void deletar(Long id){
-        if(getById(id) == null){
-            throw new EmptyResultDataAccessException(EntidadesMsgException.PRODUTO.getEntidade(), 1);
-        }
         produtoRepository.deleteById(id);
     }
 

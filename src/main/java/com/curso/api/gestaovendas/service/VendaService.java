@@ -47,7 +47,7 @@ public class VendaService {
 
     public List<Venda> getVendaByData(String data){
         Optional<List<Venda>> optionalVendas = vendaRepository.findByData(LocalDate.parse(data));
-        if(optionalVendas.isEmpty()){
+        if( optionalVendas.get().size() <= 0){
             throw new EmptyResultDataAccessException(EntidadesMsgException.VENDA.getEntidade(), 1);
         }
         return optionalVendas.get();
