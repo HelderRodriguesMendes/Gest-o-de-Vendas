@@ -46,9 +46,9 @@ public class ProdutoService {
     public Produto salvar(Produto produto){
         validateCategoryExist(produto.getCategoria());
         validaProdutoDuplicado(produto);
+        Categoria categoria = categoriaService.getById(produto.getCategoria().getId());
+        produto.setCategoria(categoria);
         Produto produtoSave = produtoRepository.save(produto);
-        Categoria categoria = categoriaService.getById(produtoSave.getCategoria().getId());
-        produtoSave.setCategoria(categoria);
         return produtoSave;
     }
 
@@ -74,10 +74,10 @@ public class ProdutoService {
         }
     }
 
-    private void validateCategoryExist(Categoria categoria){
+    private Categoria validateCategoryExist(Categoria categoria){
         if(categoria.getId() == null){
             throw new RegraNegocioException("Informe a categoria do produto");
         }
-        categoriaService.getById(categoria.getId());
+        return categoriaService.getById(categoria.getId());
     }
 }
