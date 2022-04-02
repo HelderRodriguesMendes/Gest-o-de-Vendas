@@ -37,7 +37,7 @@ public class CategoriaService {
 
     public List<Categoria> findByNome(String nome){
         Optional<List<Categoria>> optionalCategorias = categoriaRepository.getByNome(nome);
-        if(optionalCategorias.isEmpty()){
+        if(optionalCategorias.get().size() <= 0){
             throw new EmptyResultDataAccessException(EntidadesMsgException.CATEGORIA.getEntidade() + " " + nome, 1);
         }else{
             return optionalCategorias.get();

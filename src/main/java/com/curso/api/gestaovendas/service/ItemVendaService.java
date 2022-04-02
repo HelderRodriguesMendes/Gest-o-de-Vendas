@@ -39,7 +39,7 @@ public class ItemVendaService {
 
     public List<ItemVenda> getItemVendaByIdVenda(Long idVenda){
         Optional<List<ItemVenda>> optionalItemVendas = itemVendaRepository.findByVenda_Id(idVenda);
-        if(optionalItemVendas.isEmpty()){
+        if(optionalItemVendas.get().size() <= 0){
             throw new EmptyResultDataAccessException(EntidadesMsgException.ITENVENDA.getEntidade(), 1);
         }
         return optionalItemVendas.get();
