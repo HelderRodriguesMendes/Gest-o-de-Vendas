@@ -48,8 +48,8 @@ public class ProdutoService {
         validaProdutoDuplicado(produto);
         Categoria categoria = categoriaService.getById(produto.getCategoria().getId());
         produto.setCategoria(categoria);
-        Produto produtoSave = produtoRepository.save(produto);
-        return produtoSave;
+        produto.setAtivo(true);
+        return produtoRepository.save(produto);
     }
 
     public Produto atualizar(Produto produto){
@@ -65,7 +65,7 @@ public class ProdutoService {
     }
 
     private void validaProdutoDuplicado(Produto produto){
-        Optional<Produto> produtoOptional = produtoRepository.findByCategoriaIdAndDescricao(produto.getCategoria().getId(), produto.getDescricao());
+        Optional<Produto> produtoOptional = produtoRepository.getByCategoriaIdAndDescricao(produto.getCategoria().getId(), produto.getDescricao());
         if(produtoOptional.isPresent() && produto.getId() != produtoOptional.get().getId()){
             throw new RegraNegocioException(String.format("O produto %s já está cadastrado", produto.getDescricao()));
         }

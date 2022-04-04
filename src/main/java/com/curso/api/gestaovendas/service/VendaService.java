@@ -29,7 +29,7 @@ public class VendaService {
     public Venda salvar(Long idCliente, VendaRequestDTO vendaRequestDTO){
         itemVendaService.validarItemVenda(vendaRequestDTO.getItemVendaRequestDTOS());
         Cliente cliente = clienteService.getById(idCliente);
-         return vendaRepository.save(new Venda(vendaRequestDTO.getData(), cliente));
+         return vendaRepository.save(new Venda(vendaRequestDTO.getData(), cliente, true));
     }
 
     public List<Venda> getAllVendas(){
@@ -38,7 +38,7 @@ public class VendaService {
 
     public List<Venda> findVendaByIdCliente(Long idCliente){
         clienteService.getById(idCliente);
-        Optional<List<Venda>> optionalVendas = vendaRepository.findByCliente_Id(idCliente);
+        Optional<List<Venda>> optionalVendas = vendaRepository.getByCliente_Id(idCliente);
         if(optionalVendas.get().size() <= 0){
             throw new EmptyResultDataAccessException(EntidadesMsgException.VENDA.getEntidade(), 1);
         }
@@ -46,7 +46,7 @@ public class VendaService {
     }
 
     public List<Venda> getVendaByData(String data){
-        Optional<List<Venda>> optionalVendas = vendaRepository.findByData(LocalDate.parse(data));
+        Optional<List<Venda>> optionalVendas = vendaRepository.getByData(LocalDate.parse(data));
         if( optionalVendas.get().size() <= 0){
             throw new EmptyResultDataAccessException(EntidadesMsgException.VENDA.getEntidade(), 1);
         }
@@ -64,7 +64,7 @@ public class VendaService {
     public Venda atualizar(Long idVenda, Long idCliente, VendaRequestDTO vendaRequestDTO){
         getVendaById(idVenda);
         Cliente cliente = clienteService.getById(idCliente);
-        return vendaRepository.save(new Venda(idVenda, vendaRequestDTO.getData(), cliente));
+        return vendaRepository.save(new Venda(idVenda, vendaRequestDTO.getData(), cliente, true));
     }
 
     public void deletar(Long idVenda){

@@ -17,4 +17,7 @@ public class Categoria implements Serializable {
 
     @Column(name = "nome")
     private String nome;
+
+    @Column(name = "ativo")
+    private Boolean ativo;
 }

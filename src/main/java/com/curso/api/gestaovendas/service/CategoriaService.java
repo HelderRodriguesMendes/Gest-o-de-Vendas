@@ -20,6 +20,7 @@ public class CategoriaService {
 
     public Categoria salvar(Categoria categoria){
         validarCategoriaDuplicada(categoria);
+        categoria.setAtivo(true);
         return categoriaRepository.save(categoria);
     }
 
@@ -36,7 +37,7 @@ public class CategoriaService {
     }
 
     public List<Categoria> findByNome(String nome){
-        Optional<List<Categoria>> optionalCategorias = categoriaRepository.getByNome(nome);
+        Optional<List<Categoria>> optionalCategorias = categoriaRepository.getByNomeLike(nome);
         if(optionalCategorias.get().size() <= 0){
             throw new EmptyResultDataAccessException(EntidadesMsgException.CATEGORIA.getEntidade() + " " + nome, 1);
         }else{
@@ -60,7 +61,7 @@ public class CategoriaService {
     }
 
     private void validarCategoriaDuplicada(Categoria categoria){
-        Categoria categoriaIsPresent = categoriaRepository.findByNome(categoria.getNome());
+        Categoria categoriaIsPresent = categoriaRepository.getByNome(categoria.getNome());
         if(categoriaIsPresent != null && categoriaIsPresent.getId() != categoria.getId()){
             throw new RegraNegocioException(String.format("A categoria %s já esta cadastrada", categoria.getNome()));
         }

@@ -27,8 +27,12 @@ public class Venda implements Serializable {
     @JoinColumn(name = "id_cliente", referencedColumnName = "id")
     private Cliente cliente;
 
-    public Venda(LocalDate data, Cliente cliente) {
+    @Column(name = "ativo")
+    private Boolean ativo;
+
+    public Venda(LocalDate data, Cliente cliente, Boolean ativo) {
         this.data = data;
         this.cliente = cliente;
+        this.ativo = ativo;
     }
 }

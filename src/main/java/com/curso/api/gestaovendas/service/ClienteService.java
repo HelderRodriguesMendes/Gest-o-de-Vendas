@@ -36,7 +36,7 @@ public class ClienteService {
     }
 
     public List<Cliente> getByNome(String nome){
-        return getListDTO(clienteRepository.findByNomeLike("%"+nome+"%"), nome);
+        return getListDTO(clienteRepository.getByNomeLike("%"+nome+"%"), nome);
     }
 
     public List<Cliente> getByEstado(String estado){
@@ -60,6 +60,7 @@ public class ClienteService {
 
     public Cliente save(Cliente cliente){
         validarClienteDuplicado(cliente);
+        cliente.setAtivo(true);
         return clienteRepository.save(cliente);
     }
 
@@ -78,7 +79,7 @@ public class ClienteService {
     }
 
     private void validarClienteDuplicado(Cliente cliente){
-        Optional<Cliente> clienteBanco = clienteRepository.findByNome(cliente.getNome());
+        Optional<Cliente> clienteBanco = clienteRepository.getByNome(cliente.getNome());
         if (clienteBanco.isPresent() && cliente.getId() != clienteBanco.get().getId()){
             throw new RegraNegocioException(String.format("O cliente %s já está cadastrado", cliente.getNome()));
         }

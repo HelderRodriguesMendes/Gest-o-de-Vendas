@@ -12,7 +12,9 @@ import java.util.Optional;
 @Repository
 public interface ClienteRepository extends JpaRepository<Cliente, Long> {
 
-    Optional<List<Cliente>> findByNomeLike(String nome);
+    @Transactional
+    @Query(value = "select * from cliente where nome like %?1% order by nome limit 100", nativeQuery = true)
+    Optional<List<Cliente>> getByNomeLike(String nome);
 
     @Transactional
     @Query(value = "select * from cliente where estado = ?1 and ativo = 1 order by nome limit 100", nativeQuery = true)
@@ -22,7 +24,9 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long> {
     @Query(value = "select * from cliente where cidade = ?1 and ativo = 1 order by nome limit 100", nativeQuery = true)
     public Optional<List<Cliente>> getByCidade(String cidade);
 
-    public Optional<Cliente> findByNome(String nome);
+    @Transactional
+    @Query(value = "select * from cliente where nome = ?1 and ativo = 1 order by nome limit 100", nativeQuery = true)
+    public Optional<Cliente> getByNome(String nome);
 
 
 }

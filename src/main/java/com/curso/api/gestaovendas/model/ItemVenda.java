@@ -35,10 +35,14 @@ public class ItemVenda implements Serializable {
     @JoinColumn(name = "id_venda", referencedColumnName = "id")
     private Venda venda;
 
-    public ItemVenda(Integer quantidade, Double precoVendido, Produto produto, Venda venda) {
+    @Column(name = "ativo")
+    private Boolean ativo;
+
+    public ItemVenda(Integer quantidade, Double precoVendido, Produto produto, Venda venda, Boolean ativo) {
         this.quantidade = quantidade;
         this.precoVendido = precoVendido;
         this.produto = produto;
         this.venda = venda;
+        this.ativo = ativo;
     }
 }

@@ -33,4 +33,7 @@ public class Produto implements Serializable {
     @ManyToOne(cascade={CascadeType.ALL, CascadeType.PERSIST})
     @JoinColumn(name = "id_categoria", referencedColumnName = "id")
     private Categoria categoria;
+
+    @Column(name = "ativo")
+    private Boolean ativo;
 }

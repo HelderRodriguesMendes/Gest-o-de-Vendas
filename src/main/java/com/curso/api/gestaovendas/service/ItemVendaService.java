@@ -31,14 +31,14 @@ public class ItemVendaService {
             Produto produto = this.validateProdutoExist(itemVendaRequestDTO.getIdProduto());
             produto.setQuantidade(produto.getQuantidade() - itemVendaRequestDTO.getQuantidade());
 
-            ItemVenda itemVenda = new ItemVenda(itemVendaRequestDTO.getQuantidade(), itemVendaRequestDTO.getPrecoVendido(), produto, vendaSalva);
+            ItemVenda itemVenda = new ItemVenda(itemVendaRequestDTO.getQuantidade(), itemVendaRequestDTO.getPrecoVendido(), produto, vendaSalva, true);
             itemVendasSalvas.add(itemVendaRepository.save(itemVenda));
         });
         return itemVendasSalvas;
     }
 
     public List<ItemVenda> getItemVendaByIdVenda(Long idVenda){
-        Optional<List<ItemVenda>> optionalItemVendas = itemVendaRepository.findByVenda_Id(idVenda);
+        Optional<List<ItemVenda>> optionalItemVendas = itemVendaRepository.getByVenda_Id(idVenda);
         if(optionalItemVendas.get().size() <= 0){
             throw new EmptyResultDataAccessException(EntidadesMsgException.ITENVENDA.getEntidade(), 1);
         }
