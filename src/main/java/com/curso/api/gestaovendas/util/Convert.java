@@ -6,12 +6,15 @@ import com.curso.api.gestaovendas.requestDTO.ClienteRequestDTO;
 import com.curso.api.gestaovendas.requestDTO.ItemVendaRequestDTO;
 import com.curso.api.gestaovendas.requestDTO.ProdutoRequestDTO;
 import com.curso.api.gestaovendas.responseDTO.*;
+import com.curso.api.gestaovendas.service.CategoriaService;
 import com.curso.api.gestaovendas.service.ItemVendaService;
+import com.curso.api.gestaovendas.service.ProdutoService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class Convert {
@@ -34,6 +37,15 @@ public class Convert {
 
     public Categoria toCategoria(CategoriaRequestDTO categoriaRequestDTO) {
         return modelMapper.map(categoriaRequestDTO, Categoria.class);
+    }
+
+    public CategoriaProdutosResponseDTO toCategoriaProdutosResponseDTO(ProdutoService produtoService,
+                                                                       CategoriaService categoriaService,
+                                                                       Long idCategoria){
+        Categoria categoria = categoriaService.getById(idCategoria);
+        List<Produto> produtos = produtoService.getByCategoria(idCategoria);
+        List<ProdutoResponseDTO> produtoResponseDTOS = (produtos.stream().map(produto -> toProdutoResponseDTO(produto)).collect(Collectors.toList()));
+        return new CategoriaProdutosResponseDTO(categoria.getId(), categoria.getNome(), produtoResponseDTOS);
     }
 
     //###########################################################################

@@ -1,9 +1,11 @@
 package com.curso.api.gestaovendas.controller;
 
 import com.curso.api.gestaovendas.requestDTO.CategoriaRequestDTO;
+import com.curso.api.gestaovendas.responseDTO.CategoriaProdutosResponseDTO;
 import com.curso.api.gestaovendas.responseDTO.CategoriaResponseDTO;
 import com.curso.api.gestaovendas.model.Categoria;
 import com.curso.api.gestaovendas.service.CategoriaService;
+import com.curso.api.gestaovendas.service.ProdutoService;
 import com.curso.api.gestaovendas.util.Convert;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -34,11 +36,20 @@ public class CategoriaController {
     @Autowired
     private CategoriaService categoriaService;
 
+    @Autowired
+    private ProdutoService produtoService;
+
     @ApiOperation(value = "Salvar Categoria", nickname = "salvar")
     @PostMapping
     public ResponseEntity<CategoriaResponseDTO> salvar(@Valid @RequestBody CategoriaRequestDTO categoriaRequestDTO){
         categoria = categoriaService.salvar(convert.toCategoria(categoriaRequestDTO));
         return new ResponseEntity<>(convert.toCategoriaResponseDTO(categoria), HttpStatus.CREATED);
+    }
+
+    @ApiOperation(value = "Bucar categoria por ID com seus produtos", nickname = "bucarCategoriaProdutosId")
+    @GetMapping("/getCategoriaAndProdutos/{id}")
+    public ResponseEntity<CategoriaProdutosResponseDTO> getCategoriaAndProdutos(@PathVariable Long id){
+        return new ResponseEntity<>(convert.toCategoriaProdutosResponseDTO(produtoService, categoriaService, id), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Listar todas categorias", nickname = "listarCategorias")

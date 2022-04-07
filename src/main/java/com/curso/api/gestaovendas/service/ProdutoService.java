@@ -43,6 +43,10 @@ public class ProdutoService {
         return produtoOptional.get();
     }
 
+    public List<Produto> getByCategoria(Long idCategoria){
+        return produtoRepository.findByCategoria(idCategoria);
+    }
+
     public Produto salvar(Produto produto){
         validateCategoryExist(produto.getCategoria());
         validaProdutoDuplicado(produto);
@@ -61,7 +65,12 @@ public class ProdutoService {
     }
 
     public void deletar(Long id){
-        produtoRepository.deleteById(id);
+        produtoRepository.desativar(id);
+    }
+
+    public void deletarPorCategoria(Long idCategoria){
+        List<Produto> produtos = getByCategoria(idCategoria);
+        produtos.forEach(produto -> deletar(produto.getId()));
     }
 
     private void validaProdutoDuplicado(Produto produto){

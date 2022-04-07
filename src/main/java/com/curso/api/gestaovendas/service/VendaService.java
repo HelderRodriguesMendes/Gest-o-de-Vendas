@@ -33,7 +33,7 @@ public class VendaService {
     }
 
     public List<Venda> getAllVendas(){
-        return vendaRepository.findAll();
+        return vendaRepository.getAllVendas().get();
     }
 
     public List<Venda> findVendaByIdCliente(Long idCliente){
@@ -71,7 +71,11 @@ public class VendaService {
         getVendaById(idVenda);
         List<ItemVenda> itemVendas = itemVendaService.getItemVendaByIdVenda(idVenda);
         itemVendas.stream().forEach(itemVenda -> itemVendaService.deletar(itemVenda.getId()));
-        vendaRepository.deleteById(idVenda);
+        vendaRepository.deletar(idVenda);
     }
 
+    public void deletarIdCliente(Long idCliente){
+        Venda venda = getVendaById(idCliente);
+        deletar(venda.getId());
+    }
 }

@@ -19,6 +19,9 @@ public class ClienteService {
     @Autowired
     private ClienteRepository clienteRepository;
 
+    @Autowired
+    private VendaService vendaService;
+
     public List<Cliente> getAll(Pageable pageable){
         Page<Cliente> clientes = clienteRepository.findAll(pageable);
         return clientes.getContent();
@@ -75,7 +78,9 @@ public class ClienteService {
         if(getById(id) == null){
             throw new EmptyResultDataAccessException(EntidadesMsgException.CLIENTE.getEntidade(), 1);
         }
-        clienteRepository.deleteById(getById(id).getId());
+        getById(id);
+        vendaService.deletarIdCliente(id);
+        clienteRepository.deletar(id);
     }
 
     private void validarClienteDuplicado(Cliente cliente){

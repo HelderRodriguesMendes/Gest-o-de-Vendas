@@ -18,6 +18,9 @@ public class CategoriaService {
     @Autowired
     private CategoriaRepository categoriaRepository;
 
+    @Autowired
+    private ProdutoService produtoService;
+
     public Categoria salvar(Categoria categoria){
         validarCategoriaDuplicada(categoria);
         categoria.setAtivo(true);
@@ -57,7 +60,9 @@ public class CategoriaService {
         if(getById(id) == null){
             throw new EmptyResultDataAccessException(EntidadesMsgException.CATEGORIA.getEntidade()  + " " + id,1);
         }
-        categoriaRepository.deleteById(getById(id).getId());
+        getById(id);
+        produtoService.deletarPorCategoria(id);
+        categoriaRepository.deletar(id);
     }
 
     private void validarCategoriaDuplicada(Categoria categoria){

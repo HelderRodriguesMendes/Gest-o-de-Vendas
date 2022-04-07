@@ -6,6 +6,7 @@ import com.curso.api.gestaovendas.model.Venda;
 import com.curso.api.gestaovendas.requestDTO.VendaRequestDTO;
 import com.curso.api.gestaovendas.responseDTO.ClienteVendaResponseDTO;
 import com.curso.api.gestaovendas.responseDTO.VendaResponseDTO;
+import com.curso.api.gestaovendas.service.ClienteService;
 import com.curso.api.gestaovendas.service.ItemVendaService;
 import com.curso.api.gestaovendas.service.VendaService;
 import com.curso.api.gestaovendas.util.Convert;
@@ -31,6 +32,9 @@ public class VendaController {
     @Autowired
     private ItemVendaService itemVendaService;
 
+    @Autowired
+    private ClienteService clienteService;
+
     Convert convert = new Convert();
     List<Venda> vendas = new ArrayList<>();
 
@@ -52,7 +56,7 @@ public class VendaController {
     @GetMapping("/vendaByIdCliente/{id}")
     public ResponseEntity<ClienteVendaResponseDTO> getVendaByIdCliente(@PathVariable Long id){
         List<Venda> vendas = vendaService.findVendaByIdCliente(id);
-        Cliente cliente = vendas.get(1).getCliente();
+        Cliente cliente = clienteService.getById(id);
         return new ResponseEntity<>(new ClienteVendaResponseDTO(cliente.getId(), cliente.getNome(),
             convert.toListVendaResponseDTO(vendas, itemVendaService)), HttpStatus.OK);
     }

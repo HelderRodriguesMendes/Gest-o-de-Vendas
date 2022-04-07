@@ -79,7 +79,7 @@ public class ItemVendaService {
     }
 
     public void deletar(Long id){
-        itemVendaRepository.deleteById(id);
+        itemVendaRepository.deletar(id);
     }
 
     public void validarItemVenda(List<ItemVendaRequestDTO> itemVendaRequestDTOS){
