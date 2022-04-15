@@ -68,14 +68,14 @@ public class ClienteController {
     }
 
     @ApiOperation(value = "Salvar cliente", nickname = "salvarCliente")
-    @PostMapping
+    @PostMapping("/salvar")
     public ResponseEntity<ClienteResponseDTO>save(@Valid @RequestBody ClienteRequestDTO clienteRequestDTO){
         Cliente cliente = clienteService.save(convert.toCliente(clienteRequestDTO));
         return new ResponseEntity<>(convert.toClienteResponseDTO(cliente), HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "Alterar cliente", nickname = "atualizarCliente")
-    @PutMapping("/{id}")
+    @PutMapping("/atualizar/{id}")
     public ResponseEntity<ClienteResponseDTO>atualizar(@PathVariable Long id, @RequestBody ClienteRequestDTO clienteRequestDTO){
         clienteRequestDTO.setId(id);
         Cliente cliente = clienteService.atualizar(convert.toCliente(clienteRequestDTO));
@@ -83,7 +83,7 @@ public class ClienteController {
     }
 
     @ApiOperation(value = "Deletar um cliente", nickname = "deletarCliente")
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/deletar/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletar(@PathVariable Long id){
         clienteService.deletar(id);

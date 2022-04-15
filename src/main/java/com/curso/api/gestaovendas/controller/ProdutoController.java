@@ -34,7 +34,7 @@ public class ProdutoController {
     List<Produto> produtos = new ArrayList<>();
 
     @ApiOperation(value = "Salvar um produto", nickname = "salvarProduto")
-    @PostMapping
+    @PostMapping("/salvar")
     public ResponseEntity<ProdutoResponseDTO> salvar(@Valid @RequestBody ProdutoRequestDTO produtoRequestDTO){
         Produto produto = produtoService.salvar(convert.toProduto(produtoRequestDTO));
         return new ResponseEntity<>(convert.toProdutoResponseDTO(produto), HttpStatus.CREATED);
@@ -63,7 +63,7 @@ public class ProdutoController {
     }
 
     @ApiOperation(value = "Atualizar produto", nickname = "atualizarProduto")
-    @PutMapping("/{id}")
+    @PutMapping("/atualizar/{id}")
     public ResponseEntity<ProdutoResponseDTO> atualizar(@PathVariable Long id, @RequestBody ProdutoRequestDTO produtoRequestDTO){
         produtoRequestDTO.setId(id);
         Produto produto = convert.toProduto(produtoRequestDTO);
@@ -71,7 +71,7 @@ public class ProdutoController {
     }
 
     @ApiOperation(value = "Deletar um produto", nickname = "deletarProduto")
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/deletar/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletar(@PathVariable Long id){
         produtoService.deletar(id);

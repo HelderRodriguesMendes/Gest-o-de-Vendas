@@ -40,7 +40,7 @@ public class CategoriaController {
     private ProdutoService produtoService;
 
     @ApiOperation(value = "Salvar Categoria", nickname = "salvar")
-    @PostMapping
+    @PostMapping("/salvar")
     public ResponseEntity<CategoriaResponseDTO> salvar(@Valid @RequestBody CategoriaRequestDTO categoriaRequestDTO){
         categoria = categoriaService.salvar(convert.toCategoria(categoriaRequestDTO));
         return new ResponseEntity<>(convert.toCategoriaResponseDTO(categoria), HttpStatus.CREATED);
@@ -76,7 +76,7 @@ public class CategoriaController {
     }
 
     @ApiOperation(value = "Atualizar categoria", nickname = "atualizarCategoria")
-    @PutMapping("/{id}")
+    @PutMapping("/atualizar/{id}")
     public ResponseEntity<CategoriaResponseDTO> atualizar(@PathVariable Long id, @RequestBody CategoriaRequestDTO categoriaRequestDTO){
         categoriaRequestDTO.setId(id);
         categoria = categoriaService.atualizar(convert.toCategoria(categoriaRequestDTO));
@@ -84,7 +84,7 @@ public class CategoriaController {
     }
 
     @ApiOperation(value = "Deletar uma categoria", nickname = "deletarCategoria")
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/deletar/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletar(@PathVariable Long id){
         categoriaService.deletar(id);

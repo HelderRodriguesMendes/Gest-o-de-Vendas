@@ -62,7 +62,7 @@ public class VendaController {
     }
 
     @ApiOperation(value = "Bucar uma venda por ID", nickname = "getVendaById")
-    @GetMapping("/{id}")
+    @GetMapping("/getVendaById/{id}")
     public ResponseEntity<VendaResponseDTO> getVendaById(@PathVariable Long id){
         Venda venda = vendaService.getVendaById(id);
         return new ResponseEntity<>(convert.toVendaResponseDTO(venda, itemVendaService), HttpStatus.OK);
@@ -84,7 +84,7 @@ public class VendaController {
     }
 
     @ApiOperation(value = "Deletar uma venda", nickname = "deletarVenda")
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/deletar/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletar(@PathVariable Long id){
         vendaService.deletar(id);
