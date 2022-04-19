@@ -12,7 +12,7 @@
 
 
 ### Sobre o projeto
-Esta é uma API simples de gerenciamento de vendas no qual permite realizar o controle de cadastros de clientes, produtos, categorias e vendas, fornece métricas de usabilidade em forma de gráficos e o rastreamento dos seus serviços.
+Esta é uma API de gerenciamento de vendas no qual permite realizar o controle de cadastros de clientes, produtos, categorias e vendas, fornece métricas de usabilidade em forma de gráficos e o rastreamento dos seus serviços.
 
 Observações: Esse projeto é resultado de um curso feito na plataforma [Udemy](https://www.udemy.com/)
 
