@@ -62,3 +62,8 @@ Observações: Esse projeto é resultado de um curso feito na plataforma [Udemy]
 
 ![GRAFANA](https://user-images.githubusercontent.com/29339786/163899762-affd12ad-9049-45eb-b919-28740a7fddad.png)
 
+
+### Certificado do Curso
+
+![UC-dda2de14-67e6-4f00-961e-ba7a91469c2d](https://user-images.githubusercontent.com/29339786/163900393-99c9786a-f05a-4f12-b331-d5d2c93e4a86.jpg)
+
